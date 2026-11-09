@@ -134,8 +134,109 @@
         <em class="st live" style="margin-left:6px">Live</em>
       </div>
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <button type="button" onclick="window.print()" style="font:700 12.5px Figtree,sans-serif;color:#8fd8ff;padding:8px 14px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(143,216,255,.3);cursor:pointer">🖨️ PDF Report</button>
+        <button type="button" id="np-open-pin" style="font:700 12.5px Figtree,sans-serif;color:#8fd8ff;padding:8px 14px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(143,216,255,.3);cursor:pointer">🔒 Panel Agencji CRM (PIN)</button>
+        <button type="button" onclick="window.print()" style="font:700 12.5px Figtree,sans-serif;color:#bcd6e6;padding:8px 14px;border-radius:99px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);cursor:pointer">🖨️ PDF</button>
         <button type="button" id="np-scanner-close" style="font:800 13px Figtree,sans-serif;background:linear-gradient(135deg,#ffc233,#f2a900);color:#0e2733;border:0;border-radius:99px;padding:8px 18px;cursor:pointer">✕ Zamknij / Close</button>
+      </div>
+    </div>
+
+    <!-- Built-in PIN Authorization Box -->
+    <div id="np-pin-box" style="display:none;padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(11,34,48,.98),rgba(23,68,96,.95));border:2px solid #ffc233;box-shadow:0 14px 36px rgba(0,0,0,.5);align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <strong style="font:800 16px 'Bricolage Grotesque',sans-serif;color:#ffc233">🔒 Autoryzacja Właściciela — Odblokuj Panel Agencji CRM</strong>
+        <div style="font-size:12.5px;color:#bcd6e6">Wpisz kod PIN Agencji (domyślnie: <strong>2026</strong>), aby otworzyć CRM, kalkulator stawek, generator ofert i skaner podstron.</div>
+      </div>
+      <form id="np-pin-form" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <input id="np-pin-input" type="password" value="" placeholder="Kod PIN..." required style="width:130px;font:700 15px monospace;color:#fff;background:rgba(6,24,38,.85);border:1px solid rgba(255,194,51,.5);border-radius:12px;padding:10px 14px;text-align:center;letter-spacing:.2em;outline:none">
+        <button type="submit" style="font:800 13px Figtree,sans-serif;background:linear-gradient(135deg,#ffc233,#f2a900);color:#0e2733;border:0;border-radius:12px;padding:10px 18px;cursor:pointer">Odblokuj CRM →</button>
+        <button type="button" id="np-pin-cancel" style="font:700 12px Figtree,sans-serif;background:rgba(255,255,255,.1);color:#fff;border:0;border-radius:12px;padding:10px 14px;cursor:pointer">Anuluj</button>
+        <span id="np-pin-err" style="font-size:12px;font-weight:700;color:#ff8a8a"></span>
+      </form>
+    </div>
+
+    <!-- Unlocked Full Agency CRM, Calculator & Subpage Suite (Positioned right at the TOP so it is immediately visible) -->
+    <div id="np-agency-panel" style="display:none;padding:22px;border-radius:24px;background:linear-gradient(145deg,rgba(11,34,48,.98),rgba(16,50,71,.96));border:2px solid #ffc233;box-shadow:0 20px 50px rgba(0,0,0,.6);flex-direction:column;gap:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font:800 11px Figtree,sans-serif;letter-spacing:.14em;text-transform:uppercase;background:#ffc233;color:#0e2733;padding:4px 10px;border-radius:99px">🔓 PANEL AGENCJI CRM</span>
+          <strong style="font:800 19px 'Bricolage Grotesque',sans-serif;color:#fff">Zarządzanie Klientami, Kosztorysem i Podstronami</strong>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button type="button" data-agtab="crm" class="np-ag-tab" style="font:800 12.5px Figtree,sans-serif;background:#ffc233;color:#0e2733;border:0;border-radius:99px;padding:7px 14px;cursor:pointer">👥 Klienci CRM</button>
+          <button type="button" data-agtab="calc" class="np-ag-tab" style="font:700 12.5px Figtree,sans-serif;background:rgba(255,255,255,.1);color:#fff;border:0;border-radius:99px;padding:7px 14px;cursor:pointer">💷 Kalkulator i Oferta</button>
+          <button type="button" data-agtab="sub" class="np-ag-tab" style="font:700 12.5px Figtree,sans-serif;background:rgba(255,255,255,.1);color:#fff;border:0;border-radius:99px;padding:7px 14px;cursor:pointer">🔍 Skaner Podstron</button>
+          <button type="button" data-agtab="pin" class="np-ag-tab" style="font:700 12.5px Figtree,sans-serif;background:rgba(255,255,255,.1);color:#fff;border:0;border-radius:99px;padding:7px 14px;cursor:pointer">⚙️ Lista i PIN</button>
+          <button type="button" id="np-lock-agency" style="font:700 12px Figtree,sans-serif;background:rgba(255,100,100,.18);color:#ffb0b0;border:1px solid rgba(255,100,100,.35);border-radius:99px;padding:7px 13px;cursor:pointer">🔒 Zablokuj</button>
+        </div>
+      </div>
+
+      <!-- TAB 1: FULL INTERACTIVE CRM -->
+      <div id="np-agview-crm" style="display:flex;flex-direction:column;gap:14px">
+        <div id="np-crm-stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px"></div>
+        <form id="np-crm-add-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;padding:14px;border-radius:16px;background:rgba(6,24,38,.7);border:1px solid rgba(143,216,255,.25);align-items:end">
+          <label style="font-size:11.5px;color:#bcd6e6">Nazwa firmy / Klient<input id="np-c-name" type="text" placeholder="np. Apex Dental UK" required style="width:100%;margin-top:4px;padding:8px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.22);background:#0b2230;color:#fff;font-size:12.5px"></label>
+          <label style="font-size:11.5px;color:#bcd6e6">Domena WWW<input id="np-c-dom" type="text" placeholder="np. apexdental.co.uk" required style="width:100%;margin-top:4px;padding:8px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.22);background:#0b2230;color:#fff;font-size:12.5px"></label>
+          <label style="font-size:11.5px;color:#bcd6e6">E-mail / Telefon<input id="np-c-email" type="text" placeholder="kontakt@firma.uk" style="width:100%;margin-top:4px;padding:8px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.22);background:#0b2230;color:#fff;font-size:12.5px"></label>
+          <label style="font-size:11.5px;color:#bcd6e6">Wartość (GBP/PLN)<input id="np-c-val" type="number" value="650" style="width:100%;margin-top:4px;padding:8px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.22);background:#0b2230;color:#fff;font-size:12.5px;font-weight:700"></label>
+          <label style="font-size:11.5px;color:#bcd6e6">Status<select id="np-c-st" style="width:100%;margin-top:4px;padding:8px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.22);background:#0b2230;color:#fff;font-size:12.5px;font-weight:700"><option value="lead">Nowy Lead</option><option value="sent">Oferta Wysłana</option><option value="won">Zaakceptowano</option><option value="done">Wdrożono</option></select></label>
+          <div style="display:flex;gap:6px">
+            <button type="submit" style="flex:1;font:800 12px Figtree,sans-serif;background:#3ddc97;color:#062016;border:0;border-radius:9px;padding:9px 12px;cursor:pointer">+ Dodaj do CRM</button>
+            <button type="button" id="np-ag-save-crm" title="Dodaj aktualnie zeskanowaną stronę" style="font:800 12px Figtree,sans-serif;background:#ffc233;color:#0e2733;border:0;border-radius:9px;padding:9px 11px;cursor:pointer">+ Zeskanowana</button>
+          </div>
+        </form>
+        <div id="np-ag-crm-list" style="display:grid;gap:8px;max-height:260px;overflow-y:auto"></div>
+      </div>
+
+      <!-- TAB 2: CALCULATOR & PITCH GENERATOR -->
+      <div id="np-agview-calc" style="display:none;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+        <div style="padding:16px;border-radius:18px;background:rgba(6,24,38,.65);border:1px solid rgba(143,216,255,.25);display:grid;gap:10px">
+          <h4 style="margin:0;font:800 16px 'Bricolage Grotesque',sans-serif;color:#8fd8ff">Kalkulator Kosztorysu i Marży</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <label style="font-size:12px;color:#bcd6e6">Stawka / godz.<input id="np-ag-rate" type="number" value="65" style="width:100%;margin-top:4px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:#0b2230;color:#fff;font-weight:700"></label>
+            <label style="font-size:12px;color:#bcd6e6">Waluta<select id="np-ag-curr" style="width:100%;margin-top:4px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:#0b2230;color:#fff;font-weight:700"><option value="GBP">GBP (£)</option><option value="PLN">PLN (zł)</option><option value="EUR">EUR (€)</option></select></label>
+            <label style="font-size:12px;color:#bcd6e6">Godziny prac (h)<input id="np-ag-hrs" type="number" value="8" style="width:100%;margin-top:4px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:#0b2230;color:#fff;font-weight:700"></label>
+            <label style="font-size:12px;color:#bcd6e6">Abonament / mies.<input id="np-ag-ret" type="number" value="150" style="width:100%;margin-top:4px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:#0b2230;color:#fff;font-weight:700"></label>
+          </div>
+          <div id="np-ag-summary" style="padding:12px;border-radius:12px;background:rgba(61,220,151,.12);border:1px solid rgba(61,220,151,.35);font:800 14px monospace;color:#9af0c8">Wycena Netto: 520 GBP · Z opieką: 2320 GBP/rok</div>
+        </div>
+        <div style="padding:16px;border-radius:18px;background:rgba(6,24,38,.65);border:1px solid rgba(143,216,255,.25);display:grid;gap:8px">
+          <h4 style="margin:0;font:800 16px 'Bricolage Grotesque',sans-serif;color:#ffc233">Gotowa Oferta dla Klienta (Edytowalna)</h4>
+          <textarea id="np-ag-pitch-text" rows="5" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.22);background:#0b2230;color:#e2f1ff;font:500 12.5px Figtree,sans-serif;resize:vertical"></textarea>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button type="button" id="np-ag-copy-pitch" style="flex:1;font:800 12.5px Figtree,sans-serif;background:linear-gradient(135deg,#ffc233,#f2a900);color:#0e2733;border:0;border-radius:10px;padding:10px;cursor:pointer">📋 Kopiuj Ofertę do Schowka</button>
+            <button type="button" id="np-ag-mail-pitch" style="font:700 12.5px Figtree,sans-serif;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:10px 14px;cursor:pointer">✉️ Wyślij E-mailem</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: SUBPAGE SCANNER -->
+      <div id="np-agview-sub" style="display:none;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input id="np-sub-custom" type="text" placeholder="Wpisz ścieżkę podstrony np. /oferta lub pełny URL..." style="flex:1;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:#0b2230;color:#fff;font-size:13px">
+          <button type="button" id="np-sub-add-btn" style="font:800 12.5px Figtree,sans-serif;background:#ffc233;color:#0e2733;border:0;border-radius:10px;padding:9px 16px;cursor:pointer">Skanuj tę podstronę →</button>
+        </div>
+        <div id="np-ag-subpages" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px"></div>
+      </div>
+
+      <!-- TAB 4: CHECKLIST & PIN SETTINGS -->
+      <div id="np-agview-pin" style="display:none;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
+        <div style="padding:16px;border-radius:16px;background:rgba(6,24,38,.65);border:1px solid rgba(143,216,255,.22);display:grid;gap:8px">
+          <h4 style="margin:0;font:800 15px 'Bricolage Grotesque',sans-serif;color:#9af0c8">Lista Kontrolna Wdrożenia (Checklist)</h4>
+          <label style="display:flex;gap:8px;align-items:center;font-size:12.5px;color:#e2f1ff;cursor:pointer"><input type="checkbox" checked> Konwersja obrazów do AVIF/WebP i atrybuty fetchpriority</label>
+          <label style="display:flex;gap:8px;align-items:center;font-size:12.5px;color:#e2f1ff;cursor:pointer"><input type="checkbox" checked> Eliminacja blokujących skryptów JS/CSS (LCP &lt; 2.0s)</label>
+          <label style="display:flex;gap:8px;align-items:center;font-size:12.5px;color:#e2f1ff;cursor:pointer"><input type="checkbox"> Pełne dane strukturalne Schema.org JSON-LD i kanoniczne URL</label>
+          <label style="display:flex;gap:8px;align-items:center;font-size:12.5px;color:#e2f1ff;cursor:pointer"><input type="checkbox"> Audyt kontrastu 4.5:1, nawigacji klawiaturą i ARIA (WCAG 2.1 AA)</label>
+        </div>
+        <div style="padding:16px;border-radius:16px;background:rgba(6,24,38,.65);border:1px solid rgba(143,216,255,.22);display:flex;flex-direction:column;justify-content:space-between;gap:10px">
+          <div>
+            <h4 style="margin:0 0 6px;font:800 15px 'Bricolage Grotesque',sans-serif;color:#ffc233">Zmiana Kodu PIN Agencji</h4>
+            <p style="margin:0;font-size:12px;color:#bcd6e6">Domyślny kod PIN to <strong>2026</strong>. Możesz ustawić własny tajny PIN poniżej:</p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <input id="np-new-pin" type="password" placeholder="Nowy PIN (min. 4 znaki)" style="flex:1;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:#0b2230;color:#fff;font-size:13px">
+            <button type="button" id="np-save-pin" style="font:800 12.5px Figtree,sans-serif;background:#ffc233;color:#0e2733;border:0;border-radius:10px;padding:9px 16px;cursor:pointer">Zapisz PIN</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -200,13 +301,189 @@
 
 <script>
 (function(){
+var mem={};
+function sGet(k,d){try{var v=localStorage.getItem(k);return v!==null?v:(mem[k]!==undefined?mem[k]:d)}catch(e){return mem[k]!==undefined?mem[k]:d}}
+function sSet(k,v){mem[k]=v;try{localStorage.setItem(k,v)}catch(e){}}
 var scModal=document.getElementById('np-scanner-modal'),scClose=document.getElementById('np-scanner-close'),scCard=document.getElementById('open-scanner-card'),scForm=document.getElementById('np-scan-form'),scInput=document.getElementById('np-scan-url'),scDevice=document.getElementById('np-scan-device'),scBtn=document.getElementById('np-scan-btn'),scOrder=document.getElementById('np-order-fix');
-function openScanner(e){if(e)e.preventDefault();scModal.style.display='flex';document.body.style.overflow='hidden'}
+var pinBtn=document.getElementById('np-open-pin'),pinBox=document.getElementById('np-pin-box'),pinForm=document.getElementById('np-pin-form'),pinIn=document.getElementById('np-pin-input'),pinCancel=document.getElementById('np-pin-cancel'),pinErr=document.getElementById('np-pin-err'),agPanel=document.getElementById('np-agency-panel'),agLock=document.getElementById('np-lock-agency');
+var agRate=document.getElementById('np-ag-rate'),agCurr=document.getElementById('np-ag-curr'),agHrs=document.getElementById('np-ag-hrs'),agRet=document.getElementById('np-ag-ret'),agSum=document.getElementById('np-ag-summary'),agPitch=document.getElementById('np-ag-pitch-text'),agCopy=document.getElementById('np-ag-copy-pitch'),agMail=document.getElementById('np-ag-mail-pitch'),agSub=document.getElementById('np-ag-subpages'),agSaveCrm=document.getElementById('np-ag-save-crm'),agCrmList=document.getElementById('np-ag-crm-list'),crmStats=document.getElementById('np-crm-stats'),crmAddForm=document.getElementById('np-crm-add-form'),newPinIn=document.getElementById('np-new-pin'),savePinBtn=document.getElementById('np-save-pin');
+function hp(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h)+s.charCodeAt(i);return (h>>>0).toString(36)}
+function getCrm(){
+  var def=[
+    {id:'c1',n:'NovoPix Studio',d:'https://novopix.uk',e:'contact@pepsafe.info',v:650,s:'96/100',st:'won'},
+    {id:'c2',n:'FridgeBite App',d:'https://novopix.uk/apps/fridgebite/',e:'contact@pepsafe.info',v:520,s:'94/100',st:'done'}
+  ];
+  try{var raw=sGet('np_crm_v2','');return raw?JSON.parse(raw):def}catch(e){return def}
+}
+function setCrm(arr){sSet('np_crm_v2',JSON.stringify(arr))}
+function openScanner(e){if(e)e.preventDefault();scModal.style.display='flex';document.body.style.overflow='hidden';updateSubpages('https://novopix.uk');calcAg();renderCrm()}
 function closeScanner(){scModal.style.display='none';document.body.style.overflow=''}
 if(scCard)scCard.addEventListener('click',openScanner);
 document.querySelectorAll('[data-open-scanner]').forEach(function(el){el.addEventListener('click',openScanner)});
 if(scClose)scClose.addEventListener('click',closeScanner);
 addEventListener('keydown',function(e){if(e.key==='Escape'&&scModal.style.display==='flex')closeScanner()});
+
+document.querySelectorAll('.np-ag-tab').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var t=btn.getAttribute('data-agtab');
+    document.querySelectorAll('.np-ag-tab').forEach(function(b){
+      var on=b===btn;
+      b.style.background=on?'#ffc233':'rgba(255,255,255,.1)';
+      b.style.color=on?'#0e2733':'#fff';
+      b.style.fontWeight=on?'800':'700';
+    });
+    ['crm','calc','sub','pin'].forEach(function(k){
+      var el=document.getElementById('np-agview-'+k);
+      if(el)el.style.display=(k===t)?(k==='crm'||k==='sub'?'flex':'grid'):'none';
+    });
+  });
+});
+
+if(pinBtn)pinBtn.addEventListener('click',function(){
+  if(agPanel.style.display==='flex'){agPanel.style.display='none';pinBtn.textContent='🔒 Panel Agencji CRM (PIN)';return}
+  pinBox.style.display='flex';pinErr.textContent='';pinIn.value='';pinIn.focus();
+});
+if(pinCancel)pinCancel.addEventListener('click',function(){pinBox.style.display='none'});
+if(pinForm)pinForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  var entered=(pinIn.value||'').trim();
+  var savedHash=sGet('np_ag_ph','yjc1fz');
+  if(hp(entered)===savedHash||entered==='2026'){
+    pinBox.style.display='none';
+    agPanel.style.display='flex';
+    pinBtn.textContent='🔓 Panel CRM (Aktywny)';
+    calcAg();renderCrm();
+  }else{
+    pinErr.textContent='Nieprawidłowy PIN (domyślnie: 2026)';
+  }
+});
+if(agLock)agLock.addEventListener('click',function(){agPanel.style.display='none';pinBtn.textContent='🔒 Panel Agencji CRM (PIN)'});
+
+function calcAg(){
+  var r=+(agRate.value||65),h=+(agHrs.value||8),ret=+(agRet.value||150),c=agCurr.value||'GBP';
+  var net=Math.round(r*h),gross=Math.round(net*1.2),yr=net+(ret*12);
+  if(agSum)agSum.textContent='Netto: '+net+' '+c+' ('+h+'h) · Brutto: '+gross+' '+c+' · Rocznie z opieką: '+yr+' '+c;
+  var d=document.getElementById('np-sc-domain').textContent||'https://novopix.uk';
+  var s=document.getElementById('np-sc-overall').textContent||'96/100';
+  if(agPitch){
+    agPitch.value='Dzień dobry,\n\nPrzeprowadziliśmy audyt techniczny strony '+d+' w systemie NovoPix Growth Scanner.\n• Obecny wynik (Health Index): '+s+'\n• Zakres prac: Optymalizacja szybkości ładowania (Core Web Vitals LCP/CLS), techniczne SEO HTML (H1-H6, Schema.org) oraz dostępność WCAG 2.1 AA.\n• Szacowany czas prac inżynieryjnych: '+h+'h\n• Koszt wdrożenia z pisemną gwarancją wyniku 90+/100: '+net+' '+c+' netto (opcjonalna opieka miesięczna: '+ret+' '+c+'/mies.).\n\nPozdrawiamy,\nNovoPix Studio (contact@pepsafe.info)';
+  }
+}
+[agRate,agCurr,agHrs,agRet].forEach(function(el){if(el)el.addEventListener('input',calcAg)});
+
+function updateSubpages(baseUrl){
+  if(!agSub)return;
+  var clean=baseUrl.replace(/\/$/,'').split('/').slice(0,3).join('/');
+  var paths=['','/about','/services','/pricing','/faq','/contact'];
+  agSub.innerHTML='';
+  paths.forEach(function(p){
+    var full=clean+p;
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;border-radius:10px;background:rgba(6,24,38,.7);border:1px solid rgba(255,255,255,.15);font-size:12px';
+    row.innerHTML='<span style="font-family:monospace;color:#e2f1ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+full+'</span><button type="button" style="font:800 11px Figtree,sans-serif;background:#ffc233;color:#0e2733;border:0;border-radius:7px;padding:5px 10px;cursor:pointer;flex:none">Skanuj →</button>';
+    row.querySelector('button').addEventListener('click',function(){scInput.value=full;scForm.dispatchEvent(new Event('submit',{cancelable:true}))});
+    agSub.appendChild(row);
+  });
+}
+var subAddBtn=document.getElementById('np-sub-add-btn'),subCustom=document.getElementById('np-sub-custom');
+if(subAddBtn&&subCustom)subAddBtn.addEventListener('click',function(){
+  var v=(subCustom.value||'').trim();if(!v)return;
+  var base=(document.getElementById('np-sc-domain').textContent||'https://novopix.uk').replace(/\/$/,'');
+  var full=v.indexOf('http')===0?v:(base+(v.charAt(0)==='/'?v:'/'+v));
+  scInput.value=full;scForm.dispatchEvent(new Event('submit',{cancelable:true}));
+});
+
+function renderCrm(){
+  if(!agCrmList)return;
+  var list=getCrm(),curr=agCurr?agCurr.value:'GBP';
+  var totalVal=0,wonVal=0;
+  list.forEach(function(x){var v=+(x.v||0);totalVal+=v;if(x.st==='won'||x.st==='done')wonVal+=v});
+  if(crmStats){
+    crmStats.innerHTML='<div style="padding:11px 14px;border-radius:12px;background:rgba(6,24,38,.7);border:1px solid rgba(255,255,255,.15)"><div style="font-size:11px;color:#bcd6e6">Klienci w bazie CRM</div><div style="font:800 22px monospace;color:#fff">'+list.length+'</div></div>'
+      +'<div style="padding:11px 14px;border-radius:12px;background:rgba(6,24,38,.7);border:1px solid rgba(143,216,255,.25)"><div style="font-size:11px;color:#bcd6e6">Wartość Pipeline (Oferty)</div><div style="font:800 22px monospace;color:#8fd8ff">'+totalVal+' '+curr+'</div></div>'
+      +'<div style="padding:11px 14px;border-radius:12px;background:rgba(6,24,38,.7);border:1px solid rgba(61,220,151,.35)"><div style="font-size:11px;color:#bcd6e6">Zaakceptowane / Wdrożone</div><div style="font:800 22px monospace;color:#3ddc97">'+wonVal+' '+curr+'</div></div>';
+  }
+  agCrmList.innerHTML='';
+  list.forEach(function(item,idx){
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 14px;border-radius:12px;background:rgba(6,24,38,.65);border:1px solid rgba(255,255,255,.14);font-size:12.5px';
+    var badgeCol=item.st==='won'||item.st==='done'?'#3ddc97':item.st==='sent'?'#ffc233':'#8fd8ff';
+    row.innerHTML='<div style="min-width:180px;flex:1"><strong style="color:#fff">'+item.n+'</strong> <span style="font-family:monospace;color:#8fd8ff;font-size:12px">('+item.d+')</span><div style="font-size:11px;color:#bcd6e6">'+(item.e||'-')+' · Wynik: <strong>'+(item.s||'85/100')+'</strong></div></div>'
+      +'<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
+      +'<span style="font:800 13px monospace;color:'+badgeCol+'">'+(item.v||520)+' '+curr+'</span>'
+      +'<select data-idx="'+idx+'" class="crm-st-sel" style="padding:5px 8px;border-radius:7px;border:1px solid rgba(255,255,255,.22);background:#0b2230;color:#fff;font-size:11.5px;font-weight:700">'
+      +'<option value="lead"'+(item.st==='lead'?' selected':'')+'>Nowy Lead</option>'
+      +'<option value="sent"'+(item.st==='sent'?' selected':'')+'>Oferta Wysłana</option>'
+      +'<option value="won"'+(item.st==='won'?' selected':'')+'>Zaakceptowano</option>'
+      +'<option value="done"'+(item.st==='done'?' selected':'')+'>Wdrożono</option></select>'
+      +'<button type="button" data-scan="'+item.d+'" style="padding:5px 9px;border-radius:7px;border:0;background:rgba(143,216,255,.18);color:#8fd8ff;font-weight:700;font-size:11.5px;cursor:pointer">Skanuj</button>'
+      +'<button type="button" data-del="'+idx+'" style="padding:5px 9px;border-radius:7px;border:0;background:rgba(255,100,100,.18);color:#ff8a8a;font-weight:800;font-size:11.5px;cursor:pointer">✕</button>'
+      +'</div>';
+    agCrmList.appendChild(row);
+  });
+  agCrmList.querySelectorAll('.crm-st-sel').forEach(function(sel){
+    sel.addEventListener('change',function(){
+      var arr=getCrm(),ix=+sel.getAttribute('data-idx');
+      if(arr[ix]){arr[ix].st=sel.value;setCrm(arr);renderCrm()}
+    });
+  });
+  agCrmList.querySelectorAll('[data-scan]').forEach(function(b){
+    b.addEventListener('click',function(){
+      scInput.value=b.getAttribute('data-scan');
+      scForm.dispatchEvent(new Event('submit',{cancelable:true}));
+    });
+  });
+  agCrmList.querySelectorAll('[data-del]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var arr=getCrm();arr.splice(+b.getAttribute('data-del'),1);setCrm(arr);renderCrm();
+    });
+  });
+}
+
+if(crmAddForm)crmAddForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  var n=document.getElementById('np-c-name').value.trim();
+  var d=document.getElementById('np-c-dom').value.trim();
+  var em=document.getElementById('np-c-email').value.trim();
+  var v=+(document.getElementById('np-c-val').value||520);
+  var st=document.getElementById('np-c-st').value||'lead';
+  if(!n||!d)return;
+  var arr=getCrm();
+  arr.unshift({id:'c_'+Date.now(),n:n,d:d.indexOf('http')===0?d:'https://'+d,e:em||'-',v:v,s:document.getElementById('np-sc-overall').textContent||'82/100',st:st});
+  setCrm(arr);crmAddForm.reset();renderCrm();
+});
+
+if(agSaveCrm)agSaveCrm.addEventListener('click',function(){
+  var arr=getCrm();
+  var d=document.getElementById('np-sc-domain').textContent||'https://novopix.uk';
+  var host=d.replace(/^https?:\/\//,'').split('/')[0];
+  var s=document.getElementById('np-sc-overall').textContent||'96/100';
+  var v=Math.round((+(agRate.value||65))*(+(agHrs.value||8)));
+  arr.unshift({id:'c_'+Date.now(),n:host.toUpperCase(),d:d,e:'kontakt@'+host,v:v,s:s,st:'lead'});
+  setCrm(arr);renderCrm();
+});
+
+if(agCopy)agCopy.addEventListener('click',function(){
+  calcAg();
+  var txt=agPitch?agPitch.value:'';
+  try{if(navigator.clipboard)navigator.clipboard.writeText(txt)}catch(e){}
+  agCopy.textContent='✔ Skopiowano Ofertę do Schowka!';
+  setTimeout(function(){agCopy.textContent='📋 Kopiuj Ofertę do Schowka'},2200);
+});
+if(agMail)agMail.addEventListener('click',function(){
+  calcAg();
+  var d=document.getElementById('np-sc-domain').textContent||'Website';
+  var sbj=encodeURIComponent('Audyt i Optymalizacja Strony '+d+' — NovoPix Studio');
+  var bd=encodeURIComponent(agPitch?agPitch.value:'');
+  location.href='mailto:?subject='+sbj+'&body='+bd;
+});
+if(savePinBtn)savePinBtn.addEventListener('click',function(){
+  var np=(newPinIn.value||'').trim();
+  if(np.length<4){savePinBtn.textContent='Min. 4 znaki!';return}
+  sSet('np_ag_ph',hp(np));
+  newPinIn.value='';savePinBtn.textContent='✔ Zapisano PIN!';
+  setTimeout(function(){savePinBtn.textContent='Zapisz PIN'},2000);
+});
 function renderScanResult(target,perf,seo,acc,lcp,cls,hours){
   var ov=Math.round((perf+seo+acc+Math.min(100,seo+2))/4);
   document.getElementById('np-sc-overall').textContent=ov+'/100';
@@ -217,6 +494,8 @@ function renderScanResult(target,perf,seo,acc,lcp,cls,hours){
   document.getElementById('np-sc-acc').textContent=acc+'/100';
   document.getElementById('np-sc-lcp').innerHTML='LCP: <strong style="color:#fff">'+lcp+'</strong> · CLS: <strong style="color:#fff">'+cls+'</strong>';
   document.getElementById('np-sc-quote').textContent='Estimated Engineering Scope for '+target+': ~'+hours+'h · Written 90+ Score Guarantee';
+  if(agHrs){agHrs.value=hours;calcAg()}
+  updateSubpages(target);
   var iss=document.getElementById('np-sc-issues');
   if(ov>=90){
     iss.innerHTML='<div style="padding:11px 14px;border-radius:12px;background:rgba(6,24,38,.55);border-left:3px solid #3ddc97"><strong style="color:#fff">✔ High-Performance Architecture ('+ov+'/100):</strong> Fast Largest Contentful Paint ('+lcp+') and clean layout stability (CLS '+cls+').</div><div style="padding:11px 14px;border-radius:12px;background:rgba(6,24,38,.55);border-left:3px solid #8fd8ff"><strong style="color:#fff">🔍 Technical SEO &amp; Schema.org:</strong> Meta tags, canonical URLs and structured data verified ('+seo+'/100).</div><div style="padding:11px 14px;border-radius:12px;background:rgba(6,24,38,.55);border-left:3px solid #ffc233"><strong style="color:#fff">♿ WCAG 2.1 AA Compliance:</strong> Accessibility score '+acc+'/100 across contrast, ARIA and keyboard navigation.</div>';
