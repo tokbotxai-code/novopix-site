@@ -71,7 +71,12 @@ function t($key, $lang) {
     static $T = [
         'pl' => [
             'hello' => 'Dzień dobry,',
-            'intro' => 'oto wstępna, automatyczna kontrola dostępności strony: ',
+            'thanks' => 'dziękujemy za skorzystanie z bezpłatnej kontroli dostępności NovoPix.',
+            'sum_hi' => 'Wynik dostępności w teście automatycznym jest dobry. Poniżej punkty, które warto sprawdzić.',
+            'sum_mid' => 'Wynik dostępności pokazuje miejsce na poprawę. Poniżej najważniejsze punkty do sprawdzenia.',
+            'sum_lo' => 'Test automatyczny wykrył kilka istotnych problemów z dostępnością. Poniżej punkty do sprawdzenia w pierwszej kolejności.',
+            'bye' => "Z poważaniem,\nZespół NovoPix\nnovopix.uk · contact@novopix.uk",
+            'intro' => 'Przygotowaliśmy wstępną, automatyczną kontrolę strony: ',
             'results' => 'Wyniki (silnik Google Lighthouse):',
             'acc' => ' - Dostępność: ', 'perf' => ' - Wydajność: ', 'seo' => ' - SEO: ', 'bp' => ' - Dobre praktyki: ',
             'none' => 'brak pomiaru',
@@ -79,7 +84,7 @@ function t($key, $lang) {
             'found' => 'Wykryte problemy związane z dostępnością:',
             'clean' => 'Automat nie wykrył typowych błędów dostępności. To nie znaczy, że strona jest dostępna: klawiaturę, czytniki ekranu i treść trzeba sprawdzić ręcznie.',
             'important' => 'Ważne: to wstępna kontrola automatyczna jednej strony. Narzędzia znajdują tylko część problemów. Raport nie jest certyfikatem zgodności, deklaracją dostępności ani poradą prawną.',
-            'cta' => 'Chcesz pełny audyt (ręczne testy z klawiaturą i czytnikiem ekranu, lista poprawek, pomoc w deklaracji dostępności)? Odpisz na tego maila.',
+            'cta' => 'Jeśli chcesz, wykonamy pełny audyt: ręczne testy z klawiaturą i czytnikiem ekranu, priorytetową listę poprawek i pomoc w przygotowaniu deklaracji dostępności. Wystarczy odpisać na tę wiadomość, a wrócimy z propozycją zakresu i terminu.',
             'consent' => 'Otrzymujesz tę wiadomość, bo wyrażono zgodę na przesłanie raportu i informacji o usługach NovoPix. Zgodę możesz wycofać w każdej chwili, odpisując na ten adres. Polityka prywatności: https://novopix.uk/polityka/',
             'subj' => 'Raport dostępności strony: ',
             'failsubj' => 'Twoje zgłoszenie kontroli dostępności: ',
@@ -87,7 +92,12 @@ function t($key, $lang) {
         ],
         'en' => [
             'hello' => 'Hello,',
-            'intro' => 'here is a first, automated accessibility check of: ',
+            'thanks' => 'thank you for using the free NovoPix accessibility check.',
+            'sum_hi' => 'The automated accessibility result is good. Below are the points worth reviewing.',
+            'sum_mid' => 'The accessibility result shows room for improvement. Below are the main points to review.',
+            'sum_lo' => 'The automated test found several significant accessibility problems. Below are the points to review first.',
+            'bye' => "Kind regards,\nThe NovoPix Team\nnovopix.uk · contact@novopix.uk",
+            'intro' => 'We have prepared a first, automated check of: ',
             'results' => 'Results (Google Lighthouse engine):',
             'acc' => ' - Accessibility: ', 'perf' => ' - Performance: ', 'seo' => ' - SEO: ', 'bp' => ' - Best practices: ',
             'none' => 'not measured',
@@ -95,7 +105,7 @@ function t($key, $lang) {
             'found' => 'Accessibility-related issues detected:',
             'clean' => 'The automated check found no typical accessibility errors. This does not mean the site is accessible: keyboard use, screen readers and content have to be checked by hand.',
             'important' => 'Important: this is a first automated check of a single page. Tools find only part of the problems. This report is not a certificate of compliance, an accessibility statement or legal advice.',
-            'cta' => 'Would you like a full audit (manual testing with a keyboard and a screen reader, a list of fixes, help with an accessibility statement)? Reply to this e-mail.',
+            'cta' => 'If you would like, we can carry out a full audit: manual testing with a keyboard and a screen reader, a prioritised list of fixes and help preparing an accessibility statement. Simply reply to this e-mail and we will come back with a proposed scope and timeline.',
             'consent' => 'You are receiving this message because consent was given to send the report and information about NovoPix services. You can withdraw your consent at any time by replying to this address. Privacy policy: https://novopix.uk/privacy/',
             'subj' => 'Accessibility report for: ',
             'failsubj' => 'Your accessibility check request: ',
@@ -112,6 +122,8 @@ function build_report($d, $url, $lang = 'pl') {
     $L = [];
     $L[] = t('hello', $lang);
     $L[] = "";
+    $L[] = t('thanks', $lang);
+    $L[] = "";
     $L[] = t('intro', $lang) . $url;
     $L[] = "";
     if ($st === 'live_lighthouse') {
@@ -120,6 +132,8 @@ function build_report($d, $url, $lang = 'pl') {
         $L[] = t('perf', $lang) . $fmt($cat['performance'] ?? null);
         $L[] = t('seo', $lang) . $fmt($cat['seo'] ?? null);
         $L[] = t('bp', $lang) . $fmt($cat['bestPractices'] ?? null);
+        $a = $cat['accessibility'] ?? null;
+        if (is_numeric($a)) { $L[] = ""; $L[] = t($a >= 90 ? 'sum_hi' : ($a >= 50 ? 'sum_mid' : 'sum_lo'), $lang); }
     } else {
         $L[] = t('nolh', $lang);
         if (isset($cat['seo']) && is_numeric($cat['seo'])) $L[] = t('seo', $lang) . $fmt($cat['seo']);
@@ -140,7 +154,7 @@ function build_report($d, $url, $lang = 'pl') {
     $L[] = "";
     $L[] = t('consent', $lang);
     $L[] = "";
-    $L[] = "NovoPix · contact@novopix.uk";
+    $L[] = t('bye', $lang);
     return implode("\n", $L);
 }
 function run_scan($url) {
