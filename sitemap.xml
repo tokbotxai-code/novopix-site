@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://novopix.uk/</loc></url>
-<url><loc>https://novopix.uk/apps/fridgebite/</loc></url>
-<url><loc>https://novopix.uk/apps/pantrypal/</loc></url>
-<url><loc>https://novopix.uk/apps/pepsafe/</loc></url>
-<url><loc>https://novopix.uk/dostepnosc/</loc></url>
-<url><loc>https://novopix.uk/polityka/</loc></url>
-<url><loc>https://novopix.uk/privacy/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<url><loc>https://novopix.uk/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/pl/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/"/></url>
+<url><loc>https://novopix.uk/pl/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/pl/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/"/></url>
+<url><loc>https://novopix.uk/accessibility-check/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/accessibility-check/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/dostepnosc/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/accessibility-check/"/></url>
+<url><loc>https://novopix.uk/dostepnosc/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/accessibility-check/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/dostepnosc/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/accessibility-check/"/></url>
+<url><loc>https://novopix.uk/accessibility-check/check.html</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/accessibility-check/check.html"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/dostepnosc/kontrola.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/accessibility-check/check.html"/></url>
+<url><loc>https://novopix.uk/dostepnosc/kontrola.html</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/accessibility-check/check.html"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/dostepnosc/kontrola.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/accessibility-check/check.html"/></url>
+<url><loc>https://novopix.uk/privacy/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/privacy/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/polityka/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/privacy/"/></url>
+<url><loc>https://novopix.uk/polityka/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/privacy/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/polityka/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/privacy/"/></url>
+<url><loc>https://novopix.uk/apps/fridgebite/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/apps/fridgebite/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/pl/apps/fridgebite/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/apps/fridgebite/"/></url>
+<url><loc>https://novopix.uk/pl/apps/fridgebite/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/apps/fridgebite/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/pl/apps/fridgebite/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/apps/fridgebite/"/></url>
+<url><loc>https://novopix.uk/apps/pantrypal/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/apps/pantrypal/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/pl/apps/pantrypal/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/apps/pantrypal/"/></url>
+<url><loc>https://novopix.uk/pl/apps/pantrypal/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/apps/pantrypal/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/pl/apps/pantrypal/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/apps/pantrypal/"/></url>
+<url><loc>https://novopix.uk/apps/pepsafe/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/apps/pepsafe/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/pl/apps/pepsafe/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/apps/pepsafe/"/></url>
+<url><loc>https://novopix.uk/pl/apps/pepsafe/</loc><xhtml:link rel="alternate" hreflang="en" href="https://novopix.uk/apps/pepsafe/"/><xhtml:link rel="alternate" hreflang="pl" href="https://novopix.uk/pl/apps/pepsafe/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://novopix.uk/apps/pepsafe/"/></url>
+<url><loc>https://novopix.uk/accessibility-check/accessibility-statements.html</loc></url>
+<url><loc>https://novopix.uk/dostepnosc/badanie-2026.html</loc></url>
+<url><loc>https://novopix.uk/dostepnosc/deklaracja-dostepnosci-szkola.html</loc></url>
 </urlset>
