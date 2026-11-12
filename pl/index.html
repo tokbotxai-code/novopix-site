@@ -118,7 +118,7 @@
 <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><input type="hidden" name="lang" value="pl">
 <div class="cb"><button class="btn pri" type="submit">Wyślij wiadomość</button><span id="cs" role="status" aria-live="polite"></span></div><p class="priv">Używamy Twoich danych wyłącznie do odpowiedzi. <a href="/polityka/">Polityka prywatności</a></p></form></div></div></section>
 </main>
-<footer><div class="w"><span>© 2026 NovoPix</span><span><a href="#apps">Projekty</a> · <a href="#numbers">Liczby</a> · <a href="#approach">Sposób pracy</a> · <a href="#scanner">Bezpłatna kontrola</a> · <a href="/dostepnosc/">Kontrola dostępności</a> · <a href="#contact">Kontakt</a> · <a href="/pl/apps/fridgebite/">FridgeBite</a> · <a href="/pl/apps/pantrypal/">PantryPal</a> · <a href="/pl/apps/pepsafe/">PepSafe</a> · <a href="/polityka/">Prywatność</a> · <a href="https://pantrypal.novopix.uk/#/privacy" target="_blank" rel="noopener">Prywatność PantryPal</a></span></div></footer>
+<footer><div class="w"><span>© 2026 NovoPix</span><span><a href="#apps">Projekty</a> · <a href="#numbers">Liczby</a> · <a href="#approach">Sposób pracy</a> · <a href="#scanner">Bezpłatna kontrola</a> · <a href="/dostepnosc/">Kontrola dostępności</a> · <a href="/pl/cennik/">Cennik</a> · <a href="#contact">Kontakt</a> · <a href="/pl/apps/fridgebite/">FridgeBite</a> · <a href="/pl/apps/pantrypal/">PantryPal</a> · <a href="/pl/apps/pepsafe/">PepSafe</a> · <a href="/polityka/">Prywatność</a> · <a href="https://pantrypal.novopix.uk/#/privacy" target="_blank" rel="noopener">Prywatność PantryPal</a></span></div></footer>
 
 <script>
 (function(){
@@ -236,7 +236,7 @@ document.addEventListener('pointerleave',function(){mouse.on=0;curEl.style.opaci
 addEventListener('pointerdown',function(e){mouse.x=e.clientX;mouse.y=e.clientY;mouse.on=1;if(!rm){shock.x=e.clientX;shock.y=e.clientY;shock.t=tnow}if(e.pointerType==='touch'){clearTimeout(window.__tm);window.__tm=setTimeout(function(){mouse.on=0},900)}});
 document.addEventListener('pointerup',function(e){if(e.pointerType==='touch'){clearTimeout(window.__tm);window.__tm=setTimeout(function(){mouse.on=0},500)}});
 
-var navLinks=[].slice.call(document.querySelectorAll('#nv a')),bubs=[].slice.call(document.querySelectorAll('.bub'));
+var navLinks=[].slice.call(document.querySelectorAll('#nv a[href^="#"]')),bubs=[].slice.call(document.querySelectorAll('.bub'));
 function goSec(el){if(!el)return;el.querySelectorAll('.rv:not(.in)').forEach(function(x){x.classList.add('in','now');try{fire(x)}catch(e){}});var y=el.id==='top'?0:el.getBoundingClientRect().top+scrollY-0;var far=Math.abs(y-scrollY)>innerHeight*2.2;window.scrollTo({top:y,behavior:(rm||far)?'auto':'smooth'})}
 function spyShape(){var y=scrollY+innerHeight*.78,c=0;SECS.forEach(function(s,i){if(s&&s.offsetTop<=y)c=i});if(scrollY+innerHeight>=document.documentElement.scrollHeight-4)c=SECS.length-1;
  if(c!==sec){sec=c;document.body.dataset.s=sec;if(sec===0)morphTo('w'+wi);else morphTo(SHAPES[SECS[sec].id])}
