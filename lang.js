@@ -12,5 +12,5 @@
   var pref = get();
   if (bot || (pref !== 'en' && pref !== 'pl') || pref === cur || /[?&]nolang\b/.test(location.search)) return;
   var t = d.querySelector('.lsw a[hreflang="' + pref + '"]');
-  if (t && t.getAttribute('href')) location.replace(t.getAttribute('href') + location.hash);
+  if (t && t.getAttribute('href')) location.replace(t.getAttribute('href') + location.search + location.hash);
 })();
