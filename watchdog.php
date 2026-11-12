@@ -22,14 +22,21 @@ $to = 'contact@novopix.uk';
 $state = [];
 if (is_file($stateFile)) { $d = json_decode((string)file_get_contents($stateFile), true); if (is_array($d)) $state = $d; }
 
-function check($url) {
+function probe($url, $head) {
   $ch = curl_init($url);
-  curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_NOBODY => false, CURLOPT_TIMEOUT => 10,
-    CURLOPT_CONNECTTIMEOUT => 10, CURLOPT_FOLLOWLOCATION => false, CURLOPT_USERAGENT => 'NovoPix-Watchdog/1.0']);
+  $o = [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 10, CURLOPT_CONNECTTIMEOUT => 10,
+    CURLOPT_FOLLOWLOCATION => false, CURLOPT_USERAGENT => 'NovoPix-Watchdog/1.0'];
+  if ($head) $o[CURLOPT_NOBODY] = true; else $o[CURLOPT_RANGE] = '0-0';
+  curl_setopt_array($ch, $o);
   curl_exec($ch);
   $code = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
   curl_close($ch);
-  return $code === 200;
+  return $code;
+}
+function check($url) {
+  $code = probe($url, true);
+  if ($code === 405 || $code === 501) $code = probe($url, false); // GET, 1 byte
+  return $code === 200 || $code === 206;
 }
 function notify($to, $subject, $body, $mailLog) {
   if ($mailLog) { file_put_contents($mailLog, "To: $to\nSubject: $subject\n\n$body\n---\n", FILE_APPEND); return; }

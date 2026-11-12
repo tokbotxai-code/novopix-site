@@ -15,6 +15,9 @@ Co 5 min sprawdza 5 adresów (HTTP 200, timeout 10 s). Po 2 kolejnych porażkach
 4. W polu **Command** wklej: `/usr/local/bin/php /home/lrtwzfhleb/novopix.uk/watchdog.php >/dev/null 2>&1`
 5. Zapisz („Add New Cron Job”). Pierwszy mail przyjdzie dopiero po 2 porażkach.
 
+## Zużycie
+Żądanie HEAD (przy 405/501 jeden GET z `Range: 0-0`), timeout 10 s. 5 usług × 288 kontroli/dobę = ok. 1440 żądań na dobę. Jedno to kilkaset bajtów nagłówków, czyli ok. 0,5–1 MB transferu na dobę łącznie (szacunek).
+
 ## Blokada dostępu z WWW
 W repo nie ma pliku `.htaccess`, więc go nie dodano. Jeśli istnieje na serwerze w `/home/lrtwzfhleb/novopix.uk/.htaccess`, dopisz na końcu (kod w pliku i tak zwraca 403 poza CLI):
 
