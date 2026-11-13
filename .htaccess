@@ -1,0 +1,14 @@
+# NovoPix: security headers and small access rules (LiteSpeed / Apache).
+<IfModule mod_headers.c>
+Header set Strict-Transport-Security "max-age=31536000"
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "SAMEORIGIN"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+Header set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+</IfModule>
+
+# The watchdog runs from cron (CLI) only, never from the web.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^watchdog\.php$ - [F,L]
+</IfModule>
