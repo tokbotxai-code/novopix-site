@@ -73,6 +73,7 @@ function t($key, $lang) {
             'hello' => 'Dzień dobry,',
             'thanks' => 'dziękujemy za skorzystanie z bezpłatnej kontroli dostępności NovoPix.',
             'sum_hi' => 'Wynik dostępności w teście automatycznym jest dobry. Poniżej punkty, które warto sprawdzić.',
+            'sum_hi0' => 'Wynik dostępności w teście automatycznym jest dobry.',
             'sum_mid' => 'Wynik dostępności pokazuje miejsce na poprawę. Poniżej najważniejsze punkty do sprawdzenia.',
             'sum_lo' => 'Test automatyczny wykrył kilka istotnych problemów z dostępnością. Poniżej punkty do sprawdzenia w pierwszej kolejności.',
             'bye' => "Z poważaniem,\nZespół NovoPix\nnovopix.uk · contact@novopix.uk",
@@ -94,6 +95,7 @@ function t($key, $lang) {
             'hello' => 'Hello,',
             'thanks' => 'thank you for using the free NovoPix accessibility check.',
             'sum_hi' => 'The automated accessibility result is good. Below are the points worth reviewing.',
+            'sum_hi0' => 'The automated accessibility result is good.',
             'sum_mid' => 'The accessibility result shows room for improvement. Below are the main points to review.',
             'sum_lo' => 'The automated test found several significant accessibility problems. Below are the points to review first.',
             'bye' => "Kind regards,\nThe NovoPix Team\nnovopix.uk · contact@novopix.uk",
@@ -133,7 +135,9 @@ function build_report($d, $url, $lang = 'pl') {
         $L[] = t('seo', $lang) . $fmt($cat['seo'] ?? null);
         $L[] = t('bp', $lang) . $fmt($cat['bestPractices'] ?? null);
         $a = $cat['accessibility'] ?? null;
-        if (is_numeric($a)) { $L[] = ""; $L[] = t($a >= 90 ? 'sum_hi' : ($a >= 50 ? 'sum_mid' : 'sum_lo'), $lang); }
+        $map0 = a11y_map($lang); $any0 = false;
+        foreach (($d['issues'] ?? []) as $i0) { if (isset($map0[$i0['id'] ?? ''])) { $any0 = true; break; } }
+        if (is_numeric($a)) { $L[] = ""; $L[] = t($a >= 90 ? ($any0 ? 'sum_hi' : 'sum_hi0') : ($a >= 50 ? 'sum_mid' : 'sum_lo'), $lang); }
     } else {
         $L[] = t('nolh', $lang);
         if (isset($cat['seo']) && is_numeric($cat['seo'])) $L[] = t('seo', $lang) . $fmt($cat['seo']);
