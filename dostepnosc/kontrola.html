@@ -26,13 +26,14 @@
 <label for="u">Adres strony do sprawdzenia</label><input id="u" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" name="adres_strony" placeholder="np. www.twoja-szkola.pl" required>
 <label for="n">Nazwa placówki (opcjonalnie)</label><input id="n" type="text" name="placowka">
 <label for="e">Adres e-mail, na który wyślemy raport</label><input id="e" type="email" name="email" required>
-<div class="c"><input id="z" type="checkbox" name="zgoda" value="tak" required><label for="z" style="font-weight:400;margin:0">Wyrażam zgodę na przesłanie raportu oraz informacji o usługach NovoPix (np. pełny audyt i monitoring) na podany adres e-mail. Zgodę mogę wycofać w każdej chwili. Administratorem danych jest NovoPix, <a href="/polityka/">szczegóły</a>.</label></div>
+<div class="c"><input id="z" type="checkbox" name="zgoda" value="tak" required><label for="z" style="font-weight:400;margin:0">Wyrażam zgodę na przesłanie raportu dostępności na podany adres e-mail. Zgodę mogę wycofać w każdej chwili. Administratorem danych jest NovoPix, <a href="/polityka/">szczegóły</a>.</label></div>
+<div class="c"><input id="m" type="checkbox" name="marketing" value="tak"><label for="m" style="font-weight:400;margin:0">Chcę dodatkowo otrzymywać informacje o usługach NovoPix, np. pełny audyt i monitoring (nieobowiązkowe).</label></div>
 <button type="submit">Sprawdź moją stronę za darmo</button></form>
 <p id="fmsg" class="note" style="display:none" role="status"></p>
 <script>(function(){var f=document.querySelector("form");var m=document.getElementById("fmsg");
 f.addEventListener("submit",function(e){e.preventDefault();
 var i=document.getElementById("u");var v=i.value.trim();if(v&&!/^https?:\/\//i.test(v)){v="https://"+v;i.value=v}
-var d={adres_strony:v,placowka:document.getElementById("n").value,email:document.getElementById("e").value,zgoda:"tak",lang:"pl",_subject:"Darmowy skan dostępności: nowe zgłoszenie",_captcha:"false"};
+var d={adres_strony:v,placowka:document.getElementById("n").value,email:document.getElementById("e").value,zgoda:"tak",marketing:(document.getElementById("m").checked?"tak":""),lang:"pl",_subject:"Darmowy skan dostępności: nowe zgłoszenie",_captcha:"false"};
 var b=f.querySelector("button");b.disabled=true;b.textContent="Wysyłanie...";
 var c=new AbortController();var t=setTimeout(function(){c.abort()},9000);
 fetch("/dostepnosc/zglos.php",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(d),signal:c.signal})

@@ -86,6 +86,7 @@ function t($key, $lang) {
             'clean' => 'Automat nie wykrył typowych błędów dostępności. To nie znaczy, że strona jest dostępna: klawiaturę, czytniki ekranu i treść trzeba sprawdzić ręcznie.',
             'important' => 'Ważne: to wstępna kontrola automatyczna jednej strony. Narzędzia znajdują tylko część problemów. Raport nie jest certyfikatem zgodności, deklaracją dostępności ani poradą prawną.',
             'cta' => 'Jeśli chcesz, wykonamy pełny audyt: ręczne testy z klawiaturą i czytnikiem ekranu, priorytetową listę poprawek i pomoc w przygotowaniu deklaracji dostępności. Wystarczy odpisać na tę wiadomość, a wrócimy z propozycją zakresu i terminu.',
+            'consent_report' => 'Otrzymujesz tę wiadomość, bo wyrażono zgodę na przesłanie raportu. Zgodę możesz wycofać w każdej chwili, odpisując na ten adres. Polityka prywatności: https://novopix.uk/polityka/',
             'consent' => 'Otrzymujesz tę wiadomość, bo wyrażono zgodę na przesłanie raportu i informacji o usługach NovoPix. Zgodę możesz wycofać w każdej chwili, odpisując na ten adres. Polityka prywatności: https://novopix.uk/polityka/',
             'subj' => 'Raport dostępności strony: ',
             'failsubj' => 'Twoje zgłoszenie kontroli dostępności: ',
@@ -108,6 +109,7 @@ function t($key, $lang) {
             'clean' => 'The automated check found no typical accessibility errors. This does not mean the site is accessible: keyboard use, screen readers and content have to be checked by hand.',
             'important' => 'Important: this is a first automated check of a single page. Tools find only part of the problems. This report is not a certificate of compliance, an accessibility statement or legal advice.',
             'cta' => 'If you would like, we can carry out a full audit: manual testing with a keyboard and a screen reader, a prioritised list of fixes and help preparing an accessibility statement. Simply reply to this e-mail and we will come back with a proposed scope and timeline.',
+            'consent_report' => 'You are receiving this message because consent was given to send the report. You can withdraw your consent at any time by replying to this address. Privacy policy: https://novopix.uk/privacy/',
             'consent' => 'You are receiving this message because consent was given to send the report and information about NovoPix services. You can withdraw your consent at any time by replying to this address. Privacy policy: https://novopix.uk/privacy/',
             'subj' => 'Accessibility report for: ',
             'failsubj' => 'Your accessibility check request: ',
@@ -116,7 +118,7 @@ function t($key, $lang) {
     ];
     return $T[norm_lang($lang)][$key];
 }
-function build_report($d, $url, $lang = 'pl') {
+function build_report($d, $url, $lang = 'pl', $marketing = false) {
     $lang = norm_lang($lang);
     $st = $d['measurementStatus'] ?? '';
     $cat = $d['categories'] ?? [];
@@ -154,9 +156,9 @@ function build_report($d, $url, $lang = 'pl') {
     $L[] = "";
     $L[] = t('important', $lang);
     $L[] = "";
-    $L[] = t('cta', $lang);
-    $L[] = "";
-    $L[] = t('consent', $lang);
+    if ($marketing) { $L[] = t('cta', $lang);
+    $L[] = ""; }
+    $L[] = t($marketing ? 'consent' : 'consent_report', $lang);
     $L[] = "";
     $L[] = t('bye', $lang);
     return implode("\n", $L);
@@ -180,6 +182,7 @@ $lang = norm_lang(strtolower(trim((string)($d['lang'] ?? 'pl'))));
 $url = trim((string)($d['adres_strony'] ?? '')); $org = trim((string)($d['placowka'] ?? '')); $email = trim((string)($d['email'] ?? ''));
 if ($url !== '' && !preg_match('#^https?://#i', $url)) $url = 'https://' . $url;
 $host = strtolower((string)parse_url($url, PHP_URL_HOST));
+$marketing = in_array($d['marketing'] ?? '', ['tak', 'yes'], true);
 if (!in_array($d['zgoda'] ?? '', ['tak', 'yes'], true) || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 120
     || !filter_var($url, FILTER_VALIDATE_URL) || strlen($url) > 300 || strlen($org) > 200
     || $host === '' || strpos($host, '.') === false || filter_var($host, FILTER_VALIDATE_IP) || preg_match('/(^|\.)(localhost|local|internal|lan)$/', $host)) out(422, false);
@@ -190,7 +193,7 @@ $hits[] = $now; @file_put_contents($f, implode(',', $hits));
 
 // 1) powiadomienie dla wlasciciela od razu
 send(OWNER, 'Darmowy skan dostepnosci: nowe zgloszenie',
-    "Adres strony: " . clean($url) . "\nPlacowka: " . clean($org) . "\nE-mail: " . clean($email) . "\nJezyk raportu: $lang\nZgoda na raport i informacje o uslugach NovoPix: tak\nIP: $ip\n", $email);
+    "Adres strony: " . clean($url) . "\nPlacowka: " . clean($org) . "\nE-mail: " . clean($email) . "\nJezyk raportu: $lang\nZgoda na raport: tak\nZgoda marketingowa: " . ($marketing ? 'tak' : 'nie') . "\nIP: $ip\n", $email);
 
 // 2) odpowiedz od razu, raport w tle
 ignore_user_abort(true); @set_time_limit(200);
@@ -202,7 +205,7 @@ else { @ob_end_flush(); @flush(); }
 
 $scan = run_scan($url);
 if ($scan) {
-    $rep = build_report($scan, $url, $lang);
+    $rep = build_report($scan, $url, $lang, $marketing);
     send($email, t('subj', $lang) . $host, $rep, OWNER);
     send(OWNER, 'Wyslano raport: ' . $host, "Raport wyslany do: $email\n\n" . $rep);
 } else {

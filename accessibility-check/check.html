@@ -22,13 +22,14 @@
 <label for="u">Website address to check</label><input id="u" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" name="adres_strony" placeholder="e.g. www.your-organisation.org.uk" required>
 <label for="n">Organisation name (optional)</label><input id="n" type="text" name="placowka">
 <label for="e">E-mail address to send the report to</label><input id="e" type="email" name="email" required>
-<div class="c"><input id="z" type="checkbox" name="zgoda" value="yes" required><label for="z" style="font-weight:400;margin:0">I agree to receive the report and information about NovoPix services (for example a full audit or monitoring) at this e-mail address. I can withdraw my consent at any time. The data controller is NovoPix, <a href="/privacy/">details</a>.</label></div>
+<div class="c"><input id="z" type="checkbox" name="zgoda" value="yes" required><label for="z" style="font-weight:400;margin:0">I agree to the accessibility report being sent to this e-mail address. I can withdraw my consent at any time. The data controller is NovoPix, <a href="/privacy/">details</a>.</label></div>
+<div class="c"><input id="m" type="checkbox" name="marketing" value="yes"><label for="m" style="font-weight:400;margin:0">I would also like to receive information about NovoPix services, for example a full audit or monitoring (optional).</label></div>
 <button type="submit">Check my website for free</button></form>
 <p id="fmsg" class="note" style="display:none" role="status"></p>
 <script>(function(){var f=document.querySelector("form");var m=document.getElementById("fmsg");var L="Check my website for free";
 f.addEventListener("submit",function(e){e.preventDefault();
 var i=document.getElementById("u");var v=i.value.trim();if(v&&!/^https?:\/\//i.test(v)){v="https://"+v;i.value=v}
-var d={adres_strony:v,placowka:document.getElementById("n").value,email:document.getElementById("e").value,zgoda:"yes",lang:"en"};
+var d={adres_strony:v,placowka:document.getElementById("n").value,email:document.getElementById("e").value,zgoda:"yes",marketing:(document.getElementById("m").checked?"yes":""),lang:"en"};
 var b=f.querySelector("button");b.disabled=true;b.textContent="Sending...";
 var c=new AbortController();var t=setTimeout(function(){c.abort()},9000);
 fetch("/dostepnosc/zglos.php",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(d),signal:c.signal})
