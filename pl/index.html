@@ -150,7 +150,8 @@ var navLinks=[].slice.call(document.querySelectorAll('#nv a[href^="#"]')),bubs=[
 function goSec(el){if(!el)return;el.querySelectorAll('.rv:not(.in)').forEach(function(x){x.classList.add('in','now');try{fire(x)}catch(e){}});var y=el.id==='top'?0:el.getBoundingClientRect().top+scrollY-0;var far=Math.abs(y-scrollY)>innerHeight*2.2;window.scrollTo({top:y,behavior:(rm||far)?'auto':'smooth'})}
 function spyShape(){var y=scrollY+innerHeight*.78,c=0;SECS.forEach(function(s,i){if(s&&s.offsetTop<=y)c=i});if(scrollY+innerHeight>=document.documentElement.scrollHeight-4)c=SECS.length-1;
  if(c!==sec){sec=c;document.body.dataset.s=sec;if(sec===0)morphTo('w'+wi);else morphTo(SHAPES[SECS[sec].id])}
- navLinks.forEach(function(a){var i=SECS.indexOf(document.querySelector(a.getAttribute('href')));a.classList.toggle('on',i===sec&&sec>0);if(i===sec&&sec>0)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')});
+ var NAVIDS=['apps','numbers','approach','about','templates','pricing','faq','scanner','contact'],ly=scrollY+innerHeight*.4,actId='';NAVIDS.forEach(function(id){var e=document.getElementById(id);if(e&&e.offsetTop<=ly)actId=id});if(scrollY+innerHeight>=document.documentElement.scrollHeight-4)actId='contact';if(scrollY<innerHeight*.3)actId='';
+ navLinks.forEach(function(a){var on=a.getAttribute('href')==='#'+actId;a.classList.toggle('on',on);if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')});
  bubs.forEach(function(b,i){b.classList.toggle('on',i===sec);if(i===sec)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')})}
 var rafS=0;addEventListener('scroll',function(){lastInput=tnow;if(rafS)return;rafS=requestAnimationFrame(function(){rafS=0;spyShape()})},{passive:true});
 var hvNav=null;
