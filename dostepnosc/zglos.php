@@ -71,7 +71,7 @@ function t($key, $lang) {
     static $T = [
         'pl' => [
             'hello' => 'Dzień dobry,',
-            'thanks' => 'dziękujemy za skorzystanie z bezpłatnej kontroli dostępności NovoPix.',
+            'thanks' => 'dziękujemy za skorzystanie z bezpłatnej analizy dostępności NovoPix.',
             'sum_hi' => 'Wynik dostępności w teście automatycznym jest dobry. Poniżej punkty, które warto sprawdzić.',
             'sum_hi0' => 'Wynik dostępności w teście automatycznym jest dobry.',
             'sum_mid' => 'Wynik dostępności pokazuje miejsce na poprawę. Poniżej najważniejsze punkty do sprawdzenia.',
