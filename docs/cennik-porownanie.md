@@ -22,7 +22,7 @@ Decyzja właściciela: usługi zaczynają się od £29.99; cena w PLN = cena w G
 | Opieka Max | £250 | £175 | 875 zł |
 | Sam szablon | bez odniesienia | £149 | 745 zł |
 | Speed Sprint | bez odniesienia | £490 | 2 450 zł |
-| Aplikacja na zamówienie | wycena | od £2 500 | 12 500 zł |
+| Aplikacja na zamówienie | wycena | od £500 | 999 zł |
 
 Uwagi: źródła to blogi sprzedażowe, więc na stronie nie podajemy liczby „30%”, tylko że ceny są poniżej typowych stawek. Speed Sprint i szablon nie mają wiarygodnego odniesienia, więc zostały bez zmian (szablon przeliczony ×5).
 
