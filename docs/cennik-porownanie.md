@@ -42,3 +42,7 @@ Punkty odniesienia (netto, orientacyjne): strona-wizytówka freelancer od 1 500 
 | Aplikacja na zamówienie | od 999 zł |
 
 Ceny GBP bez zmian.
+
+
+## Aktualizacja 15.11 (decyzja właściciela)
+Strona Pro 1 499 zł / £599; Max 2 199 zł / £1 099; Speed Sprint 499 zł / £299; Opieka Pro UK £99/mies.; aplikacja od 999 zł / £500.
