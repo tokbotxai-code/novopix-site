@@ -39,6 +39,6 @@ Punkty odniesienia (netto, orientacyjne): strona-wizytówka freelancer od 1 500 
 | Dostępność Start / Pro / Max | 99 / 590 / 1 790 zł |
 | Opieka Start / Pro / Max | 79 / 149 / 299 zł mies. |
 | Speed Sprint | 990 zł |
-| Aplikacja na zamówienie | od 4 990 zł |
+| Aplikacja na zamówienie | od 999 zł |
 
 Ceny GBP bez zmian.
