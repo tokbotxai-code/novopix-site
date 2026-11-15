@@ -25,3 +25,20 @@ Decyzja właściciela: usługi zaczynają się od £29.99; cena w PLN = cena w G
 | Aplikacja na zamówienie | wycena | od £2 500 | 12 500 zł |
 
 Uwagi: źródła to blogi sprzedażowe, więc na stronie nie podajemy liczby „30%”, tylko że ceny są poniżej typowych stawek. Speed Sprint i szablon nie mają wiarygodnego odniesienia, więc zostały bez zmian (szablon przeliczony ×5).
+
+
+## Aktualizacja 15.11.2026: ceny w Polsce (decyzja właściciela: „w Polsce takie usługi są dużo tańsze, wolę mniej zarobić niż nie mieć klientów”)
+Cena w PLN nie jest już GBP × 5. Ustawiona jest osobno, poniżej polskiego rynku.
+
+Punkty odniesienia (netto, orientacyjne): strona-wizytówka freelancer od 1 500 zł, agencja 2 500–4 500 zł (poradnik Orange); średnia firmowa strona ok. 6 000 zł (cenauslug.pl); opieka techniczna nad stroną ok. 130–280 zł/mies., średnio ok. 213 zł (cenauslug.pl, 2 556 zł rocznie). Dla audytu dostępności nie znaleziono wiarygodnych polskich cen, więc ceny przeglądów ustawiono zachowawczo nisko.
+
+| Usługa | PLN netto |
+|---|---|
+| Sam szablon | od 299 zł |
+| Strona Start / Pro / Max | 990 / 2 490 / 4 190 zł |
+| Dostępność Start / Pro / Max | 99 / 590 / 1 790 zł |
+| Opieka Start / Pro / Max | 79 / 149 / 299 zł mies. |
+| Speed Sprint | 990 zł |
+| Aplikacja na zamówienie | od 4 990 zł |
+
+Ceny GBP bez zmian.
