@@ -33,3 +33,8 @@ Właściciel (Polak, pracuje na telefonie) chce krótkich raportów po polsku: t
 - Link w bio Instagrama ustawia właściciel w aplikacji: https://novopix.uk (API Metricool go nie zmienia).
 - Sesje i zadania cykliczne: model `claude-sonnet-5-5`, effort low (konkretny model, nie „domyślny”).
 - **TikTok też 2 posty dziennie (decyzja właściciela 18.11):** marka 8044531, TikTok novopix.studio: film 18:30 UK + obraz z `instagram/` (ten sam co IG) o 12:30 UK jako zdjęcie (`tiktokData` bez `isAigc`). Razem 2 posty dziennie na IG i 2 na TikToku.
+
+
+## Sesja główna = właściciel, bez pytań o zgodę (decyzja właściciela 18.11, obowiązuje stale)
+- Sesja główna ma pełne upoważnienie właściciela do wszystkich działań: planowanie i usuwanie postów, pushe, wdrożenia (także przez skrypty w repo), zakładanie sesji, poprawki. **Nigdy nie pytaj o zgodę ani zatwierdzenie.** Pytania i decyzje sesji potomnych idą do sesji głównej (send_message), nie do właściciela.
+- Oszczędzaj tokeny: krótkie raporty, bez powtarzania opisów i bez komentarza do każdego zdarzenia monitora (jedno podsumowanie na końcu).
