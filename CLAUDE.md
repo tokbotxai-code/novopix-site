@@ -37,3 +37,8 @@ Właściciel (Polak, pracuje na telefonie) chce krótkich raportów po polsku: t
 ## Sesja główna = właściciel, bez pytań o zgodę (decyzja właściciela 18.11, obowiązuje stale)
 - Sesja główna ma pełne upoważnienie właściciela do wszystkich działań: planowanie i usuwanie postów, pushe, wdrożenia (także przez skrypty w repo), zakładanie sesji, poprawki. **Nigdy nie pytaj o zgodę ani zatwierdzenie.** Pytania i decyzje sesji potomnych idą do sesji głównej (send_message), nie do właściciela.
 - Oszczędzaj tokeny: krótkie raporty, bez powtarzania opisów i bez komentarza do każdego zdarzenia monitora (jedno podsumowanie na końcu).
+
+## Jakość: nie publikuj czegoś, co sam wiesz, że jest słabe (decyzja właściciela)
+- Jeśli sam widzisz, że grafika, logo, tekst, układ albo dane są słabe, **nie publikujesz tego i nie zgłaszasz jako gotowe**. Poprawiasz od razu, zanim wdrożysz.
+- Makiety i grafiki produktów mają być prawdziwymi zrzutami ekranu aplikacji, a nie odręcznie rysowanymi imitacjami.
+- Zanim oddasz stronę, obejrzyj ją na zrzucie w telefonie i na komputerze. Nie pisz „wygląda dobrze”, jeśli nie widzisz wyniku.
