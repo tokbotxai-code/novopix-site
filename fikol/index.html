@@ -32,7 +32,7 @@ h1{font:16px 'Press Start 2P',monospace;margin:0;color:var(--coral);letter-spaci
 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .hud{display:flex;justify-content:space-between;align-items:center;gap:4px;white-space:nowrap;font:10px 'Press Start 2P',monospace;color:var(--dim);padding:10px 2px 2px}
 .hud b{color:var(--brass);font-weight:400}
-.pad{flex:1;display:grid;place-items:center;min-height:0}
+.pad{flex:1;display:grid;place-items:end center;min-height:0;padding-top:14px}
 .dpad{display:grid;grid-template-columns:repeat(3,var(--cell));grid-template-rows:repeat(3,var(--cell));gap:6px}
 .dpad button{border:0;border-radius:16px;background:var(--case);color:var(--ink);font-size:24px;box-shadow:0 4px 0 #0a0e14,inset 0 1px 0 #ffffff18;cursor:pointer}
 .dpad button:active{transform:translateY(3px);box-shadow:0 1px 0 #0a0e14}
@@ -46,10 +46,9 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .levels{display:grid;grid-template-columns:repeat(6,44px);gap:6px}
 .levels button{height:46px;border-radius:12px;border:1px solid var(--edge);background:var(--case);color:var(--ink);font:12px 'Press Start 2P',monospace;cursor:pointer}
 .levels button:disabled{opacity:.35}
-.sub{display:flex;justify-content:space-between;font:12px Inter,sans-serif;color:var(--dim);padding:2px 4px 0}
+.sub{display:flex;justify-content:space-between;align-items:center;gap:8px;font:12px Inter,sans-serif;color:var(--dim);padding:6px 2px 0}
+#undo{min-height:40px;padding:0 12px;font-size:13px}
 .sub b{color:var(--ink);font-weight:600}
-#undo{grid-column:1;grid-row:1;font-size:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;gap:2px}
-#undo small{font:600 8px Inter,sans-serif;letter-spacing:.5px;color:var(--dim)}
 .opts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .opts .btn{min-height:44px;font-size:13px}
 .opts .btn[aria-pressed="true"]{border-color:var(--cyan);color:var(--cyan)}
@@ -85,11 +84,10 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       <div class="over" id="over" role="dialog" aria-label="Okno gry"></div>
     </div>
     <div class="hud"><span>POZ <b id="hLvl">1</b></span><span>ŚRUBKI <b id="hScr">0/0</b></span><span>KLUCZE <b id="hKey">0</b></span><span>AMMO <b id="hAmmo">0</b></span></div>
-    <div class="sub"><span>Ruchy <b id="hMv">0</b></span><span id="hBest">Rekord: –</span></div>
+    <div class="sub"><button class="btn" id="undo" aria-label="Cofnij ruch (Z)">↶ Cofnij</button><span>Ruchy <b id="hMv">0</b></span><span id="hBest">Rekord: –</span></div>
   </div>
   <div class="pad">
     <div class="dpad">
-      <button id="undo" aria-label="Cofnij ruch (Z)">↶<small>COFNIJ</small></button>
       <button class="u" data-d="0,-1" aria-label="Góra">▲</button>
       <button id="fire" aria-label="PIF, strzał">PIF</button>
       <button class="l" data-d="-1,0" aria-label="Lewo">◀</button>
@@ -330,7 +328,7 @@ const PAR=[44,56,59,50,39,63,52,49,63,50,56,48,35,62,63,56];
 const starsFor=(i,m)=>m<=PAR[i]*1.3+6?3:m<=PAR[i]*2+10?2:1;
 const starStr=n=>'★'.repeat(n)+'☆'.repeat(3-n);
 let best={};try{best=JSON.parse(localStorage.getItem('fikolBest')||'{}')}catch(e){}
-let set={music:true,sfx:true,voice:false};try{Object.assign(set,JSON.parse(localStorage.getItem('fikolSet')||'{}'));if(localStorage.getItem('fikolMute')==='1'&&!localStorage.getItem('fikolSet')){set.music=false;set.sfx=false}}catch(e){}
+let set={music:true,sfx:true,voice:true};try{Object.assign(set,JSON.parse(localStorage.getItem('fikolSet')||'{}'));if(localStorage.getItem('fikolMute')==='1'&&!localStorage.getItem('fikolSet')){set.music=false;set.sfx=false}}catch(e){}
 function saveSet(){try{localStorage.setItem('fikolSet',JSON.stringify(set))}catch(e){}}
 
 // ===== AUDIO (wszystko generowane na żywo, bez plików) =====
@@ -388,8 +386,25 @@ const A={ctx:null,mG:null,mT:0,mBar:0,mTimer:null,mw:-1,
   const pump=()=>{if(!this.ctx||this.mG!==g)return;while(this.mT<c.currentTime+.8){this.mT+=musicBar(c,g,this.mT,th,this.mBar++)}};pump();this.mTimer=setInterval(pump,150)},
  stopMusic(){clearInterval(this.mTimer);this.mTimer=null;const g=this.mG;this.mG=null;if(g&&this.ctx){try{g.gain.cancelScheduledValues(this.ctx.currentTime);g.gain.setValueAtTime(g.gain.value,this.ctx.currentTime);g.gain.linearRampToValueAtTime(0,this.ctx.currentTime+.3)}catch(e){}setTimeout(()=>{try{g.disconnect()}catch(e){}},500)}},
  pause(){this.stopMusic();this.mw=-1;if(this.ctx&&this.ctx.state==='running')this.ctx.suspend().catch(()=>{})},
- speak(t){if(!set.voice||!('speechSynthesis' in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pl-PL';const v=speechSynthesis.getVoices().find(x=>/^pl/i.test(x.lang));if(v)u.voice=v;u.rate=1.05;u.pitch=1.5;speechSynthesis.speak(u)}catch(e){}},
- hush(){try{'speechSynthesis' in window&&speechSynthesis.cancel()}catch(e){}}
+ vbuf:{},vs:null,last:null,
+ async speak(key,text){
+  this.hush();this.last={key,text};if(!set.voice)return;
+  const c=this.ensure();if(!c){this.tts(text);return}
+  try{
+   let buf=this.vbuf[key];
+   if(!buf){const r=await fetch('voice/'+key+'.mp3');if(!r.ok)throw 0;buf=await c.decodeAudioData(await r.arrayBuffer());this.vbuf[key]=buf}
+   if(!this.last||this.last.key!==key||!set.voice)return;          // w międzyczasie zmienił się ekran
+   if(c.state!=='running'){await c.resume().catch(()=>{});if(c.state!=='running'){this.blocked=true;return}}
+   this.blocked=false;this.stopV();
+   if(!this.voG){this.voG=c.createGain();this.voG.gain.value=1.5;this.voG.connect(this.out)}
+   const src=c.createBufferSource();src.buffer=buf;src.connect(this.voG);this.vs=src;this.duck(true);
+   src.onended=()=>{if(this.vs===src){this.vs=null;this.duck(false)}};src.start()
+  }catch(e){this.tts(text)}
+ },
+ duck(on){if(this.ctx&&this.musG)try{this.musG.gain.setTargetAtTime(on?.06:.2,this.ctx.currentTime,.12)}catch(e){}},
+ tts(t){if(!set.voice||!t||!('speechSynthesis' in window))return;try{const u=new SpeechSynthesisUtterance(t);u.lang='pl-PL';const v=speechSynthesis.getVoices().find(x=>/^pl/i.test(x.lang));if(v)u.voice=v;u.rate=1.05;u.pitch=1.5;speechSynthesis.speak(u)}catch(e){}},
+ stopV(){if(this.vs){try{this.vs.onended=null;this.vs.stop()}catch(e){}this.vs=null;this.duck(false)}},
+ hush(){this.last=null;this.stopV();try{'speechSynthesis' in window&&speechSynthesis.cancel()}catch(e){}}
 };
 const sfx=n=>A.play(n);
 let typeTimer=null;
@@ -408,7 +423,7 @@ function load(i){
 }
 const live=document.getElementById('live');const say=t=>{live.textContent='';setTimeout(()=>live.textContent=t,30)};
 function focusGo(){const g=document.getElementById('go');g&&g.focus({preventScroll:true})}
-function showTip(){say('Poziom '+(lvl+1)+', '+L.name+'. '+L.tip+' Bipek: '+BIP[lvl]);over.innerHTML=`<h2>Poziom ${lvl+1}<br>${L.name}</h2><p>${L.tip}</p><p class="bip" aria-hidden="true"><b>BIPEK:</b> <span id="bt"></span></p><button class="btn" id="go">Start</button>`;over.classList.add('show');state='tip';focusGo();typeIn(document.getElementById('bt'),BIP[lvl]);A.speak(BIP[lvl]);document.getElementById('go').onclick=()=>{A.hush();sfx('ui');over.classList.remove('show');state='play'}}
+function showTip(){say('Poziom '+(lvl+1)+', '+L.name+'. '+L.tip+' Bipek: '+BIP[lvl]);over.innerHTML=`<h2>Poziom ${lvl+1}<br>${L.name}</h2><p>${L.tip}</p><p class="bip" aria-hidden="true"><b>BIPEK:</b> <span id="bt"></span></p><button class="btn" id="go">Start</button>`;over.classList.add('show');state='tip';focusGo();typeIn(document.getElementById('bt'),BIP[lvl]);A.speak('bip'+lvl,BIP[lvl]);document.getElementById('go').onclick=()=>{A.hush();sfx('ui');over.classList.remove('show');state='play'}}
 function hud(){hAmmo.textContent=ammo;hLvl.textContent=lvl+1;hScr.textContent=screws+'/'+total;hKey.textContent=keys;hMv.textContent=moves;const b=best[lvl];hBest.textContent=b?'Rekord: '+b.moves+' '+starStr(b.stars):'Rekord: –'}
 const solid=c=>'#DBO%><^vM'.includes(c);let tn=0;
 function enemyAt(x,y){return enemies.some(e=>e.x===x&&e.y===y)}
@@ -453,7 +468,7 @@ const STORY=[
  {h:'FIKOL',t:'Mały robot Fikol leciał na zwykłą misję serwisową. Zwykłą, dopóki nie zabrakło mu paliwa. Rozbił się na obcej planecie, a z kapsuły ratunkowej wypadły wszystkie śrubki.',b:'Dalej'},
  {h:'BIPEK',t:'Na szczęście komputer pokładowy przeżył. Nazywa się Bipek i uwielbia gadać. Cztery planety, szesnaście kapsuł. Zbierz śrubki, naprawiaj, odlatuj. I uważaj na strażników!',b:'Lecimy'}
 ];
-function story(p){p=p||0;story0=true;state='tip';const g=STORY[p];over.innerHTML=`<h2 style="${p?'color:#56d6e8;':'font-size:28px;color:#ff6b4a'}">${g.h}</h2><p id="stt"></p><button class="btn" id="go">${g.b}</button>`;over.classList.add('show');focusGo();say(g.h+'. '+g.t);typeIn(document.getElementById('stt'),g.t);A.speak(g.t);document.getElementById('go').onclick=()=>{A.hush();sfx('ui');p+1<STORY.length?story(p+1):showTip()}}
+function story(p){p=p||0;story0=true;state='tip';const g=STORY[p];over.innerHTML=`<h2 style="${p?'color:#56d6e8;':'font-size:28px;color:#ff6b4a'}">${g.h}</h2><p id="stt"></p><button class="btn" id="go">${g.b}</button>`;over.classList.add('show');focusGo();say(g.h+'. '+g.t);typeIn(document.getElementById('stt'),g.t);A.speak('story'+p,g.t);document.getElementById('go').onclick=()=>{A.hush();sfx('ui');p+1<STORY.length?story(p+1):showTip()}}
 function step(){
   if(state!=='play')return;tn++;
   const dirs={'>':[1,0],'<':[-1,0],'^':[0,-1],'v':[0,1]};let cn=false;
@@ -477,7 +492,7 @@ function win(){
   const head=last?'Brawo!':endW?'Świat ukończony!':'Kapsuła startuje!';
   say(head+' Poziom '+(lvl+1)+', '+moves+' ruchów, '+st+' z 3 gwiazdek.'+(rec&&old?' Nowy rekord.':'')+' '+extra);
   over.innerHTML=`<h2>${head}</h2><div class="stars" aria-hidden="true">${starStr(st)}</div><p>Poziom ${lvl+1}: ${moves} ruchów${rec&&old?' (nowy rekord!)':old?' (rekord '+old.moves+')':''}</p>${extra?`<p class="bip"><b>BIPEK:</b> ${extra}</p>`:''}<button class="btn" id="go">${last?'Wybierz poziom':'Dalej'}</button><button class="btn" id="again">Jeszcze raz (lepszy wynik)</button>`;
-  over.classList.add('show');focusGo();A.speak(extra);
+  over.classList.add('show');focusGo();if(extra)A.speak(last?'fin':'end'+w,extra.split(' Gwiazdki')[0]);
   document.getElementById('go').onclick=()=>{A.hush();last?menu():load(lvl+1)};document.getElementById('again').onclick=()=>{A.hush();load(lvl)};
 }
 let before='play';
@@ -493,7 +508,7 @@ function menu(){
   over.classList.add('show');
   const cur=over.querySelector('.cur');(cur&&!cur.disabled?cur:document.getElementById('go')).focus({preventScroll:true});
   over.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{sfx('ui');load(+b.dataset.i)});
-  over.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{set[b.dataset.o]=!set[b.dataset.o];b.setAttribute('aria-pressed',set[b.dataset.o]);saveSet();A.ensure();A.music(Math.floor(lvl/4));if(b.dataset.o==='voice'&&set.voice)A.speak('Cześć! Tu Bipek.');if(b.dataset.o==='voice'&&!set.voice)A.hush();sfx('ui');syncMute()});
+  over.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{set[b.dataset.o]=!set[b.dataset.o];b.setAttribute('aria-pressed',set[b.dataset.o]);saveSet();A.ensure();A.music(Math.floor(lvl/4));if(b.dataset.o==='voice'&&set.voice)A.speak('hello','Cześć! Tu Bipek.');if(b.dataset.o==='voice'&&!set.voice)A.hush();sfx('ui');syncMute()});
   document.getElementById('go').onclick=closeMenu;
 }
 // drawing
@@ -570,8 +585,8 @@ document.getElementById('menuBtn').onclick=menu;
 const mb=document.getElementById('muteBtn');
 function syncMute(){const off=!set.music&&!set.sfx&&!set.voice;mb.setAttribute('aria-pressed',off);mb.setAttribute('aria-label',off?'Włącz dźwięk':'Wycisz wszystko')}
 mb.onclick=()=>{const off=!set.music&&!set.sfx&&!set.voice;if(off){set.music=true;set.sfx=true}else{set.music=set.sfx=set.voice=false;A.hush()}saveSet();A.ensure();A.music(Math.floor(lvl/4));syncMute();sfx('ui')};syncMute();
-const firstGesture=()=>{if(A.ensure()){A.music(Math.floor(lvl/4))}};
-addEventListener('pointerdown',firstGesture);addEventListener('keydown',firstGesture);
+const firstGesture=()=>{if(A.ensure()){A.music(Math.floor(lvl/4));if(A.blocked&&A.last&&over.classList.contains('show')){const l=A.last;A.blocked=false;A.speak(l.key,l.text)}}};
+['pointerdown','keydown','click','touchend'].forEach(ev=>addEventListener(ev,firstGesture,{passive:true}));
 document.addEventListener('visibilitychange',()=>{clearInterval(tick);tick=null;stopRep();if(document.hidden){A.pause();A.hush()}else{if(grid)tick=setInterval(step,420);if(A.ctx){A.ensure();A.music(Math.floor(lvl/4))}}});
 const ro=new ResizeObserver(resize);ro.observe(cv);addEventListener('resize',resize);
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
