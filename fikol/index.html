@@ -589,6 +589,7 @@ const firstGesture=()=>{if(A.ensure()){A.music(Math.floor(lvl/4));if(A.blocked&&
 ['pointerdown','keydown','click','touchend'].forEach(ev=>addEventListener(ev,firstGesture,{passive:true}));
 document.addEventListener('visibilitychange',()=>{clearInterval(tick);tick=null;stopRep();if(document.hidden){A.pause();A.hush()}else{if(grid)tick=setInterval(step,420);if(A.ctx){A.ensure();A.music(Math.floor(lvl/4))}}});
 const ro=new ResizeObserver(resize);ro.observe(cv);addEventListener('resize',resize);
+setTimeout(async()=>{try{const l=await (await fetch('voice/index.json')).json();for(const k of l){await fetch('voice/'+k+'.mp3',{priority:'low'}).then(r=>r.arrayBuffer())}}catch(e){}},8000);
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 load(0);requestAnimationFrame(draw);
 }
