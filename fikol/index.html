@@ -834,7 +834,19 @@ const ro=new ResizeObserver(resize);ro.observe(cv);addEventListener('resize',res
 if(window.visualViewport)visualViewport.addEventListener('resize',resize);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(resize);
 const ro2=new ResizeObserver(()=>{clearTimeout(ro2.t);ro2.t=setTimeout(resize,30)});document.querySelectorAll('.top,.hint,.sub,.hud').forEach(e=>ro2.observe(e));
-if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+const BUILD='v9';
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
+  const had=!!navigator.serviceWorker.controller;let reloaded=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!reloaded){reloaded=true;location.reload()}});
+  navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update().catch(()=>{})).catch(()=>{});
+  // sprawdzenie wersji: jeśli serwer ma nowszą, wyczyść pamięć podręczną i przeładuj (raz)
+  fetch('version.json?'+Date.now(),{cache:'no-store'}).then(r=>r.json()).then(async j=>{
+    if(!j||j.v===BUILD)return;
+    let g='';try{g=sessionStorage.getItem('fikolRel')||''}catch(e){}
+    if(g===j.v)return;try{sessionStorage.setItem('fikolRel',j.v)}catch(e){}
+    try{for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister();for(const c of await caches.keys())await caches.delete(c)}catch(e){}
+    location.reload()}).catch(()=>{});
+}
 load(0);requestAnimationFrame(draw);
 }
 </script>
