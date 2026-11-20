@@ -21,6 +21,7 @@
 :root{--cell:64px;color-scheme:dark;--bg:#10161f;--case:#1c2532;--edge:#2c3a4d;--ink:#e9eef5;--dim:#8da0b8;--coral:#ff6b4a;--brass:#ffcc3d;--cyan:#56d6e8}
 *{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
+@supports(height:100dvh){html,body{height:100dvh}}
 body{margin:0;background:radial-gradient(120% 80% at 50% 0%,#1a2433,var(--bg));color:var(--ink);font:16px/1.5 Inter,system-ui,sans-serif;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .app{height:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;padding:10px 14px 14px;gap:10px}
 .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -56,6 +57,10 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .bip{color:var(--cyan)!important;font-size:14px!important;border-left:3px solid var(--cyan);padding-left:10px;text-align:left}
 .stars{color:var(--brass);letter-spacing:2px;font-size:22px}
 .levels button small{display:block;font:9px Inter,sans-serif;color:var(--brass);letter-spacing:0;margin-top:2px}
+.kb{display:none}
+@media(hover:hover) and (pointer:fine){.kb{display:inline}}
+.tight .hint{display:none}
+.tight{--cell:46px}
 .hint{font-size:13px;color:var(--dim);text-align:center}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .levels button.done{border-color:var(--coral);color:var(--brass)}
@@ -65,6 +70,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 @media(max-width:360px){.btn{padding:0 10px;font-size:13px}h1{font-size:13px}.hud{font-size:8px;letter-spacing:-.5px}.levels{grid-template-columns:repeat(6,40px)}.levels button{height:42px}.top>div{gap:6px!important}}
 @media(max-height:760px){:root{--cell:54px}.hint{display:none}}
 @media(max-height:620px){:root{--cell:46px}.app{gap:6px;padding-top:6px}.hud{padding-top:6px}}
+@media(orientation:landscape) and (max-height:520px){:root{--cell:50px}.app{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr);column-gap:16px;row-gap:6px;max-width:none;padding:6px 14px}.top{grid-column:1;grid-row:1}.case{grid-column:1;grid-row:2;align-self:start}.pad{grid-column:2;grid-row:1/3;align-self:center;padding-top:0}.hint{display:none}.sub{padding-top:2px}.hud{padding-top:6px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -96,7 +102,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     </div>
   </div>
   <div class="sr" id="live" aria-live="polite"></div>
-  <p class="hint">Przesuń palcem albo użyj pada (można przytrzymać). PIF strzela w kierunku ostatniego ruchu. Klawiatura: strzałki lub WASD, spacja strzela, Z cofa ruch, R zaczyna od nowa, Esc to mapa poziomów.</p>
+  <p class="hint">Przesuń palcem albo użyj pada (można przytrzymać). PIF strzela w kierunku ostatniego ruchu.<span class="kb"> Klawiatura: strzałki lub WASD, spacja strzela, Z cofa ruch, R zaczyna od nowa, Esc to mapa poziomów.</span></p>
 </main>
 <script>
 {
@@ -407,6 +413,15 @@ const A={ctx:null,mG:null,mT:0,mBar:0,mTimer:null,mw:-1,
  hush(){this.last=null;this.stopV();try{'speechSynthesis' in window&&speechSynthesis.cancel()}catch(e){}}
 };
 const sfx=n=>A.play(n);
+// iOS: przełącznik trybu cichego wycisza Web Audio, chyba że sesja audio jest 'playback'
+let silentEl=null;
+function unmuteIOS(){
+  try{if(navigator.audioSession&&navigator.audioSession.type!=='playback')navigator.audioSession.type='playback'}catch(e){}
+  if(silentEl)return;
+  try{const n=4000,b=new Uint8Array(44+n),v=new DataView(b.buffer),w=(o,t)=>{for(let i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i))};
+    w(0,'RIFF');v.setUint32(4,36+n,true);w(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,8000,true);v.setUint32(28,8000,true);v.setUint16(32,1,true);v.setUint16(34,8,true);w(36,'data');v.setUint32(40,n,true);for(let i=0;i<n;i++)b[44+i]=128;
+    const a=new Audio(URL.createObjectURL(new Blob([b],{type:'audio/wav'})));a.loop=true;a.setAttribute('playsinline','');a.volume=.01;silentEl=a;a.play().catch(()=>{silentEl=null})}catch(e){}
+}
 let typeTimer=null;
 function typeIn(el,text){clearInterval(typeTimer);el.textContent=text;if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
   let i=0;el.textContent='';typeTimer=setInterval(()=>{if(!el.isConnected||!over.classList.contains('show')){clearInterval(typeTimer);return}i+=2;el.textContent=text.slice(0,i);if(i%4===0&&text[i-1]!==' ')A.blip(text[i-1]||'a');if(i>=text.length){el.textContent=text;clearInterval(typeTimer)}},26)}
@@ -504,7 +519,7 @@ function menu(){
   before=state==='tip'||state==='dead'||state==='win'?state:'play';
   state='menu';A.hush();
   const tot=Object.values(best).reduce((a,b)=>a+b.stars,0);
-  over.innerHTML=`<h2>Poziomy</h2><div class="levels">${LEVELS.map((l,i)=>{const b=best[i],ok=i===0||done.includes(i-1)||done.includes(i);return `<button data-i="${i}" class="${done.includes(i)?'done':''} ${i===lvl?'cur':''}" aria-label="Poziom ${i+1}, ${l.name}${done.includes(i)?', zaliczony'+(b?', '+b.stars+' z 3 gwiazdek':''):''}" ${ok?'':'disabled'}>${i+1}${b?`<small aria-hidden="true">${starStr(b.stars)}</small>`:''}</button>`}).join('')}</div><div class="hint" style="font-size:12px">★ ${tot} / 48</div><div class="opts">${optsHTML()}</div><button class="btn" id="go">Zamknij</button>`;
+  over.innerHTML=`<h2>Poziomy</h2><div class="levels">${LEVELS.map((l,i)=>{const b=best[i],ok=i===0||done.includes(i-1)||done.includes(i);return `<button data-i="${i}" class="${done.includes(i)?'done':''} ${i===lvl?'cur':''}" aria-label="Poziom ${i+1}, ${l.name}${done.includes(i)?', zaliczony'+(b?', '+b.stars+' z 3 gwiazdek':''):''}" ${ok?'':'disabled'}>${i+1}${b?`<small aria-hidden="true">${starStr(b.stars)}</small>`:''}</button>`}).join('')}</div><div class="hint" style="font-size:12px">★ ${tot} / 48</div><div class="opts">${optsHTML()}</div>${/iPhone|iPad/.test(navigator.userAgent)?'<div class="hint" style="font-size:11px">Brak dźwięku? Sprawdź, czy telefon nie jest w trybie cichym.</div>':''}<button class="btn" id="go">Zamknij</button>`;
   over.classList.add('show');
   const cur=over.querySelector('.cur');(cur&&!cur.disabled?cur:document.getElementById('go')).focus({preventScroll:true});
   over.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{sfx('ui');load(+b.dataset.i)});
@@ -513,12 +528,18 @@ function menu(){
 }
 // drawing
 let S=32,shake=0;
-function fit(){const app=document.querySelector('.app'),sc=document.getElementById('screen'),cs=getComputedStyle(app);
-  const gap=parseFloat(cs.rowGap)||0,kids=[...app.children].filter(k=>getComputedStyle(k).display!=='none'&&!k.classList.contains('sr'));
-  const caseEx=app.querySelector('.case').offsetHeight-sc.offsetHeight;
-  let used=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom)+gap*(kids.length-1)+caseEx;
-  for(const k of kids){if(k.classList.contains('case'))continue;used+=k.classList.contains('pad')?app.querySelector('.dpad').offsetHeight:k.offsetHeight}
-  const w=app.querySelector('.case').clientWidth-22,h=app.clientHeight-used;sc.style.width=Math.max(160,Math.min(w,h))+'px'}
+function fit(){const app=document.querySelector('.app'),sc=document.getElementById('screen');
+  const calc=()=>{const cs=getComputedStyle(app),gap=parseFloat(cs.rowGap)||0,kids=[...app.children].filter(k=>getComputedStyle(k).display!=='none'&&!k.classList.contains('sr'));
+    const caseEx=app.querySelector('.case').offsetHeight-sc.offsetHeight;
+    let used=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom)+gap*(kids.length-1)+caseEx;
+    for(const k of kids){if(k.classList.contains('case'))continue;used+=k.classList.contains('pad')?app.querySelector('.dpad').offsetHeight+14:k.offsetHeight}
+    return Math.min(app.querySelector('.case').clientWidth-22,app.clientHeight-used)};
+  const land=matchMedia('(orientation:landscape) and (max-height:520px)').matches;
+  if(land){const cs=getComputedStyle(app),cse=app.querySelector('.case').offsetHeight-sc.offsetHeight,h=app.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-app.querySelector('.top').offsetHeight-(parseFloat(cs.rowGap)||0)-cse;
+    sc.style.width=Math.max(150,Math.floor(Math.min(app.querySelector('.case').clientWidth-22,h)))+'px';return}
+  document.body.classList.remove('tight');let w=calc();
+  if(w<250){document.body.classList.add('tight');w=calc()}
+  sc.style.width=Math.max(150,Math.floor(w))+'px'}
 function resize(){fit();const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;S=cv.width/W}
 function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
 function draw(){
@@ -585,10 +606,13 @@ document.getElementById('menuBtn').onclick=menu;
 const mb=document.getElementById('muteBtn');
 function syncMute(){const off=!set.music&&!set.sfx&&!set.voice;mb.setAttribute('aria-pressed',off);mb.setAttribute('aria-label',off?'Włącz dźwięk':'Wycisz wszystko')}
 mb.onclick=()=>{const off=!set.music&&!set.sfx&&!set.voice;if(off){set.music=true;set.sfx=true}else{set.music=set.sfx=set.voice=false;A.hush()}saveSet();A.ensure();A.music(Math.floor(lvl/4));syncMute();sfx('ui')};syncMute();
-const firstGesture=()=>{if(A.ensure()){A.music(Math.floor(lvl/4));if(A.blocked&&A.last&&over.classList.contains('show')){const l=A.last;A.blocked=false;A.speak(l.key,l.text)}}};
+const firstGesture=()=>{unmuteIOS();if(A.ensure()){A.music(Math.floor(lvl/4));if(A.blocked&&A.last&&over.classList.contains('show')){const l=A.last;A.blocked=false;A.speak(l.key,l.text)}}};
 ['pointerdown','keydown','click','touchend'].forEach(ev=>addEventListener(ev,firstGesture,{passive:true}));
-document.addEventListener('visibilitychange',()=>{clearInterval(tick);tick=null;stopRep();if(document.hidden){A.pause();A.hush()}else{if(grid)tick=setInterval(step,420);if(A.ctx){A.ensure();A.music(Math.floor(lvl/4))}}});
-const ro=new ResizeObserver(resize);ro.observe(cv);addEventListener('resize',resize);
+document.addEventListener('visibilitychange',()=>{clearInterval(tick);tick=null;stopRep();if(document.hidden){A.pause();A.hush();if(silentEl)silentEl.pause()}else{if(silentEl)silentEl.play().catch(()=>{});if(grid)tick=setInterval(step,420);if(A.ctx){A.ensure();A.music(Math.floor(lvl/4))}}});
+const ro=new ResizeObserver(resize);ro.observe(cv);addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,250));addEventListener('load',resize);
+if(window.visualViewport)visualViewport.addEventListener('resize',resize);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(resize);
+const ro2=new ResizeObserver(()=>{clearTimeout(ro2.t);ro2.t=setTimeout(resize,30)});document.querySelectorAll('.top,.hint,.sub,.hud').forEach(e=>ro2.observe(e));
 setTimeout(async()=>{try{const l=await (await fetch('voice/index.json')).json();for(const k of l){await fetch('voice/'+k+'.mp3',{priority:'low'}).then(r=>r.arrayBuffer())}}catch(e){}},8000);
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 load(0);requestAnimationFrame(draw);
