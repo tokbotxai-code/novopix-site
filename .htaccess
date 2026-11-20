@@ -22,3 +22,6 @@ Header set Cache-Control "public, max-age=2592000"
 RewriteEngine On
 RewriteRule ^watchdog\.php$ - [F,L]
 </IfModule>
+
+# Web app manifests (Fikol installable game).
+AddType application/manifest+json .webmanifest
