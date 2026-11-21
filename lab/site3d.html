@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NovoPix in 3D (trial)</title><meta name="robots" content="noindex,nofollow"><link rel="icon" href="/favicon.svg?v=2">
+<style>
+:root{--ink:#f6f4ff;--mut:#c9c4ee;--v:#9277ff;--c:#62e0ff;--y:#ffc233;--bg:#0b0a1a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;overflow-x:hidden}
+a{color:inherit}canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none}
+main,nav,footer{position:relative;z-index:1}
+nav{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;gap:18px;align-items:center;padding:12px clamp(16px,4vw,48px);background:linear-gradient(#0b0a1ccc,#0b0a1c00);font-size:15px}
+nav b{font-size:18px;letter-spacing:-.01em}nav b span{color:var(--y)}nav .sp{flex:1}nav a{text-decoration:none;color:var(--mut)}nav a:hover{color:var(--c)}
+.hide-s{display:inline}@media(max-width:700px){.hide-s{display:none}}
+section{min-height:100vh;display:flex;align-items:center;padding:90px clamp(20px,8vw,120px)}
+.w{max-width:1100px;margin:0 auto;width:100%}
+h1{font-size:clamp(36px,7vw,84px);line-height:1.02;margin:0 0 18px;letter-spacing:-.03em;max-width:12em}h1 span,h2 span{color:var(--y)}
+h2{font-size:clamp(28px,5vw,54px);margin:0 0 14px;letter-spacing:-.02em}
+p.l{color:var(--mut);font-size:clamp(17px,2vw,21px);line-height:1.5;max-width:34em;margin:0 0 24px;text-shadow:0 2px 12px #0b0a1c}
+.btn{display:inline-block;padding:14px 22px;border-radius:999px;text-decoration:none;font-weight:600;margin:0 10px 10px 0}.pri{background:var(--y);color:#1a1230}.sec{border:1px solid #ffffff55}
+.eb{color:var(--c);letter-spacing:.14em;font-size:13px;text-transform:uppercase;margin-bottom:10px}
+/* pierścień produktów */
+.ringsec{height:380vh;display:block;padding:0}.stick{position:sticky;top:0;height:100vh;display:grid;place-items:center;overflow:hidden}
+.stick .hd{position:absolute;top:13vh;left:0;right:0;text-align:center;padding:0 16px}
+.stage{perspective:1200px;width:100%;height:56vh;display:grid;place-items:center}
+.ring{position:relative;width:var(--w);height:var(--h);transform-style:preserve-3d}
+.p{position:absolute;inset:0;width:var(--w);height:var(--h);border-radius:18px;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;text-decoration:none;backface-visibility:visible;border:1px solid #ffffff26;box-shadow:0 10px 40px #0008;background:linear-gradient(150deg,var(--a),var(--b))}
+.p b{font-size:22px}.p small{font-size:13px;color:#ffffffd0;line-height:1.35}.p i{position:absolute;top:14px;left:18px;font:700 12px/1 Inter;font-style:normal;opacity:.8;letter-spacing:.1em}
+.now{position:absolute;right:16px;bottom:16px;font:600 13px/1.3 Inter;letter-spacing:.08em;color:var(--mut);text-align:right}.now b{color:var(--c)}
+/* karty z pochyleniem */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;perspective:900px}
+.card{border:1px solid #ffffff26;border-radius:20px;padding:26px;background:linear-gradient(160deg,#2a1f6acc,#0f0c2acc);transform-style:preserve-3d;transition:transform .15s ease-out;box-shadow:0 14px 40px #0007;will-change:transform}
+.card h3{margin:0 0 8px;font-size:24px}.card p{margin:0;color:var(--mut);line-height:1.5}.card .n{font-size:clamp(40px,6vw,64px);font-weight:700;color:var(--y);line-height:1;margin-bottom:6px;transform:translateZ(40px)}
+.card h3,.card p{transform:translateZ(20px)}
+.pr{margin:0 0 4px;display:flex;justify-content:space-between;font-size:20px;border-bottom:1px solid #ffffff1f;padding:8px 0}.pr small{color:var(--mut);font-size:13px;display:block}.pr strong{color:var(--y)}
+.note{color:var(--mut);font-size:14px;margin-top:16px}
+footer{padding:50px clamp(20px,8vw,120px) 80px;color:var(--mut);font-size:14px}
+@media(prefers-reduced-motion:reduce){.card{transition:none}}
+</style></head><body>
+<canvas id="c" aria-hidden="true"></canvas>
+<nav><b>Novo<span>Pix</span></b><span class="sp"></span><a href="#apps" class="hide-s">Products</a><a href="#services" class="hide-s">Services</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a><a href="/" style="color:var(--c)">Normal site →</a></nav>
+<main>
+<section id="top"><div class="w"><div class="eb">Independent apps &amp; software studio · 3D trial</div>
+<h1>We design and build <span>apps and software.</span></h1>
+<p class="l">A small independent studio. We build apps, software and websites, and test everything before it ships. Websites from £349, excluding VAT.</p>
+<a class="btn pri" href="#pricing">See the prices</a><a class="btn sec" href="#contact">Get in touch</a></div></section>
+
+<section class="ringsec" id="apps" aria-label="Products"><div class="stick"><div class="hd"><div class="eb">Products and services, live now</div><h2>Everything here is <span>built and tested by us</span></h2></div>
+<div class="stage"><div class="ring" id="ring"></div></div><div class="now" id="now"></div></div></section>
+
+<section id="numbers"><div class="w"><div class="eb">By the numbers</div><h2>Small, useful <span>and moving</span></h2>
+<div class="grid"><div class="card tilt"><div class="n">6</div><h3>Products live</h3><p>FridgeBite, PantryPal, PepSafe, RentProof, website scanner, accessibility check.</p></div>
+<div class="card tilt"><div class="n">24</div><h3>Website templates</h3><p>Shops, business sites, portfolios, SaaS.</p></div>
+<div class="card tilt"><div class="n">3,000+</div><h3>Recipes to browse</h3><p>In FridgeBite.</p></div></div></div></section>
+
+<section id="services"><div class="w"><div class="eb">What we do</div><h2>Apps, websites <span>and small tools</span></h2>
+<div class="grid"><div class="card tilt"><h3>Apps</h3><p>Web apps that open in the browser and work well on a phone, like FridgeBite and PantryPal.</p></div>
+<div class="card tilt"><h3>Websites</h3><p>Clear, fast websites for small businesses and organisations, in the languages you need.</p></div>
+<div class="card tilt"><h3>Custom software</h3><p>Small tools built around one clear job, so people can use them without a manual.</p></div>
+<div class="card tilt"><h3>Accessibility checks</h3><p>A free first check and detailed reports for UK organisations. A starting point, not a WCAG certificate.</p></div></div></div></section>
+
+<section id="pricing"><div class="w"><div class="eb">Pricing</div><h2>Clear <span>starting prices</span></h2>
+<div class="grid"><div class="card tilt"><h3>Websites</h3><div class="pr"><span>Start<small>one page</small></span><strong>£349</strong></div><div class="pr"><span>Pro<small>up to 5 pages</small></span><strong>£599</strong></div><div class="pr"><span>Max<small>up to 10 pages</small></span><strong>£1,099</strong></div></div>
+<div class="card tilt"><h3>Accessibility reviews</h3><div class="pr"><span>Start<small>1 page</small></span><strong>£55</strong></div><div class="pr"><span>Pro<small>up to 5 pages</small></span><strong>£280</strong></div><div class="pr"><span>Max<small>up to 15 pages</small></span><strong>£799</strong></div></div>
+<div class="card tilt"><h3>Monthly care</h3><div class="pr"><span>Start<small>per month</small></span><strong>£29.99</strong></div><div class="pr"><span>Pro<small>per month</small></span><strong>£99</strong></div><div class="pr"><span>Max<small>per month</small></span><strong>£175</strong></div></div></div>
+<p class="note">One-off prices in GBP, excluding VAT. Scope and price are agreed in writing before any work begins. <a href="/pricing/" style="color:var(--c)">Full pricing</a></p></div></section>
+
+<section id="contact"><div class="w"><div class="eb">Contact</div><h2>Tell us <span>your idea</span></h2>
+<p class="l">We reply with questions and a plan. Want a demo of your idea? Write to us.</p>
+<a class="btn pri" href="mailto:contact@novopix.uk">contact@novopix.uk</a><a class="btn sec" href="/#contact">Contact form</a></div></section>
+</main>
+<footer>© NovoPix · This is a 3D trial page, not the public site. The normal site is at <a href="/" style="color:var(--c)">novopix.uk</a>.</footer>
+
+<script type="importmap">{"imports":{"three":"./three.module.min.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {RoomEnvironment} from './RoomEnvironment.js';
+var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches,phone=matchMedia('(max-width:640px)').matches;
+/* --- pierścień (CSS 3D) --- */
+var P=[["FridgeBite","Turn what is in your fridge into dinner. 3,000+ recipes.","https://fridgebite.novopix.uk/","#ff7a59","#7a2a6a"],
+["PantryPal","A calm view of what you have at home. No account, no ads.","https://pantrypal.novopix.uk/","#2ec4b6","#1b3a6b"],
+["PepSafe","272 substances. Legal status and evidence. Nothing for sale.","https://pepsafe.info/","#9277ff","#2a1f6a"],
+["Website scanner","Free check of speed, SEO and accessibility for any website.","https://scanner.novopix.uk/","#62e0ff","#3a2a9a"],
+["Accessibility check","Free first check and detailed reports, for UK organisations.","/accessibility-check/","#ffc233","#a8421e"],
+["RentProof","A private record of a rented flat's condition. Test version, not a legal proof.","https://rentproof.novopix.uk/","#ff7a59","#3a2a9a"]];
+var N=P.length,W=phone?170:230,H=phone?230:300,step=360/N,R=(W/2)/Math.tan(Math.PI/N)+14;
+var ring=document.getElementById('ring'),now=document.getElementById('now');ring.style.setProperty('--w',W+'px');ring.style.setProperty('--h',H+'px');
+var els=P.map(function(d,i){var a=document.createElement('a');a.className='p';a.href=d[2];a.style.setProperty('--a',d[3]);a.style.setProperty('--b',d[4]);
+ a.style.transform='rotateY('+(i*step)+'deg) translateZ('+R+'px)';a.innerHTML='<i>0'+(i+1)+'</i><b>'+d[0]+'</b><small>'+d[1]+'</small>';a.tabIndex=-1;ring.appendChild(a);return a});
+var sec=document.getElementById('apps');
+function ringFrame(){var r=sec.getBoundingClientRect(),max=sec.offsetHeight-innerHeight,y=Math.max(0,Math.min(max,-r.top)),rot=-(y/Math.max(1,max))*360*0.92;
+ ring.style.transform='translateZ('+(-R)+'px) rotateY('+rot+'deg)';var front=0,bc=-2;
+ els.forEach(function(el,i){var c=Math.cos((i*step+rot)*Math.PI/180);el.style.opacity=(0.35+0.65*(c+1)/2).toFixed(3);el.tabIndex=c>0.9?0:-1;if(c>bc){bc=c;front=i}});
+ now.innerHTML='NOW SHOWING<br><b>'+P[front][0].toUpperCase()+'</b>'}
+/* --- karty z pochyleniem --- */
+if(!reduce&&matchMedia('(hover:hover)').matches)document.querySelectorAll('.tilt').forEach(function(c){
+ c.addEventListener('pointermove',function(e){var b=c.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;c.style.transform='rotateY('+(x*14)+'deg) rotateX('+(-y*14)+'deg)'});
+ c.addEventListener('pointerleave',function(){c.style.transform=''})});
+/* --- łańcuch w tle (three.js) --- */
+var cv=document.getElementById('c'),renderer=null;
+try{renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true})}catch(e){renderer=null}
+if(renderer){
+ renderer.setPixelRatio(Math.min(devicePixelRatio,phone?1.5:2));renderer.toneMapping=THREE.ACESFilmicToneMapping;
+ var scene=new THREE.Scene(),pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new RoomEnvironment(),0.04).texture;
+ var cam=new THREE.PerspectiveCamera(40,1,0.1,200),key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(4,6,8);scene.add(key);
+ var pts=[];for(var k=0;k<10;k++){var a=k/10*Math.PI*2;pts.push(new THREE.Vector3(Math.cos(a)*11,Math.sin(a*2)*2.6+Math.sin(a)*3.2,Math.sin(a)*3.5-3))}
+ var curve=new THREE.CatmullRomCurve3(pts,true,'catmullrom',0.5),NL=80,sc=curve.getLength()/(NL*1.28);
+ var geo=new THREE.TorusGeometry(0.5,0.12,16,36);geo.scale(1,1.6,1);
+ var mat=new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:0.22,transparent:true,opacity:.55});
+ var mesh=new THREE.InstancedMesh(geo,mat,NL);scene.add(mesh);
+ var m=new THREE.Matrix4(),q=new THREE.Quaternion(),q2=new THREE.Quaternion(),pos=new THREE.Vector3(),tan=new THREE.Vector3(),up=new THREE.Vector3(0,1,0),s=new THREE.Vector3(sc,sc,sc);
+ var place=function(off){for(var i=0;i<NL;i++){var t=((i/NL+off)%1+1)%1;curve.getPointAt(t,pos);curve.getTangentAt(t,tan);q.setFromUnitVectors(up,tan);if(i%2){q2.setFromAxisAngle(tan,Math.PI/2);q.premultiply(q2)}m.compose(pos,q,s);mesh.setMatrixAt(i,m)}mesh.instanceMatrix.needsUpdate=true};
+ var cols=[new THREE.Color(0xffffff),new THREE.Color(0xff5a3c),new THREE.Color(0x50dcff),new THREE.Color(0xffffff)],col=new THREE.Color(),cur=0;
+ var size=function(){var w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.position.set(0,0,w/h<1?20:14);cam.updateProjectionMatrix()};
+ addEventListener('resize',size);size();
+}
+function frame(){ringFrame();
+ if(renderer&&!document.hidden){var max=document.documentElement.scrollHeight-innerHeight,p=max>0?scrollY/max:0;
+  cur+=((reduce?0:p*0.9)-cur)*0.1;place(cur);var f=p*3,i0=Math.min(3,Math.floor(f)),i1=Math.min(3,i0+1);col.copy(cols[i0]).lerp(cols[i1],f-i0);key.color.copy(col);cam.lookAt(0,0,0);renderer.render(scene,cam)}
+ requestAnimationFrame(frame)}
+frame();
+</script></body></html>
