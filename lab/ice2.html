@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>NovoPix · Ice v2</title><meta name="robots" content="noindex,nofollow"><link rel="icon" href="/favicon.svg?v=2">
+<title>NovoPix · Ice v2</title><meta name="robots" content="noindex,nofollow"><meta name="description" content="NovoPix: a small independent studio that builds apps, software and websites. Websites from £349, excluding VAT."><link rel="icon" href="/favicon.svg?v=2">
 <style>
 @font-face{font-family:'InterD';src:url(fonts/InterDisplay-ExtraBold.otf);font-weight:800;font-display:block}
 @font-face{font-family:'InterW';src:url(fonts/Inter-Regular.otf);font-weight:400;font-display:block}
@@ -20,7 +20,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;justify-conten
 .card{pointer-events:none;background:rgba(9,11,14,.52);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);padding:22px 24px;width:min(460px,100%);max-height:calc(100vh - 230px);overflow:auto;scrollbar-width:none}.card::-webkit-scrollbar{display:none}
 .stage.act .card{pointer-events:auto}.card.wide{width:min(720px,100%)}#s1 .card{width:min(560px,100%)}@media(min-width:701px){.stage{padding-bottom:34px}.card{max-height:calc(100vh - 128px)}#s1 h2{font-size:30px;margin:8px 0 6px}#s1 p{margin:0 0 4px}}@media(min-width:701px){#s1 .row{padding:9px 0}#s1 .row b{font-size:16px}#s1 .row span{font-size:13.5px;line-height:1.4}#s1 .tg{margin-top:3px;font-size:10px}}
 .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--frost);display:flex;gap:14px;align-items:center}.eyebrow:before{content:"";width:28px;height:1px;background:var(--frost)}
-h2{font-family:var(--display);font-weight:800;font-size:clamp(24px,3vw,40px);line-height:1.08;margin:14px 0 12px;letter-spacing:-.01em}
+h1,h2{font-family:var(--display);font-weight:800;font-size:clamp(24px,3vw,40px);line-height:1.08;margin:14px 0 12px;letter-spacing:-.01em}
 p{color:var(--frost);font-size:15px;margin:0 0 14px}
 .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
 .b{border:1px solid var(--line);background:rgba(9,11,14,.4);color:var(--ice);padding:13px 20px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .3s,background .3s;font-family:var(--body);font-weight:600}
@@ -37,11 +37,11 @@ p{color:var(--frost);font-size:15px;margin:0 0 14px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 .nogl .stage{position:static;visibility:visible!important;opacity:1!important;transform:none!important;padding:40px 22px}.nogl{overflow:auto}.nogl body{overflow:auto}.nogl #gl,.nogl .hud,.nogl #loader{display:none}.nogl .card{max-height:none;pointer-events:auto}
 </style></head><body>
-<div id="loader"><b>NOVOPIX</b><span id="lp">FREEZING 0%</span></div>
-<canvas id="gl" aria-hidden="true"></canvas><div id="cur"></div><div id="dot"></div>
+<div id="loader" role="status" aria-live="polite"><b>NOVOPIX</b><span id="lp">FREEZING 0%</span></div>
+<canvas id="gl" aria-hidden="true"></canvas><div id="cur" aria-hidden="true"></div><div id="dot" aria-hidden="true"></div>
 <header><span class="logo" data-go="0">NOVOPIX</span><a class="n" href="/">Normal site →</a></header>
 <main>
-<section class="stage" id="s0" aria-label="Home"><div class="card"><div class="eyebrow">01 · Home</div><h2>We build apps and software you can feel.</h2><p>A small independent studio. We build apps, software and websites, and test everything before it ships. Websites from £349, excluding VAT.</p><div class="btns"><a class="b solid" href="#4" data-go="4">See the prices</a><a class="b" href="#5" data-go="5">Get in touch</a></div></div></section>
+<section class="stage" id="s0" aria-label="Home"><div class="card"><div class="eyebrow">01 · Home</div><h1>We build apps and software you can feel.</h1><p>A small independent studio. We build apps, software and websites, and test everything before it ships. Websites from £349, excluding VAT.</p><div class="btns"><a class="b solid" href="#4" data-go="4">See the prices</a><a class="b" href="#5" data-go="5">Get in touch</a></div></div></section>
 <section class="stage right" id="s1" aria-label="Products"><div class="card"><div class="eyebrow">02 · Products</div><h2>Built and tested by us.</h2><p>Six things that are live right now.</p><div class="list">
 <a class="row" href="https://fridgebite.novopix.uk/"><b>FridgeBite<i>→</i></b><span>Pick what is in your fridge and get recipes you can cook now. 3,000+ recipes in English, Polish and Spanish.</span><em class="tg">Web app · EN PL ES</em></a>
 <a class="row" href="https://pantrypal.novopix.uk/"><b>PantryPal<i>→</i></b><span>A simple list of what you have at home. Your data stays on your own device: no account, no ads, no third-party trackers.</span><em class="tg">Web app · Private by default</em></a>
@@ -370,9 +370,9 @@ document.querySelectorAll('button,a.b,a.row').forEach(b=>{b.addEventListener('mo
 
 const look=new THREE.Vector3(),cp=new THREE.Vector3(),tmp=new THREE.Vector3(),tmp2=new THREE.Vector3(),clock=new THREE.Clock();
 const ease=k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
-let pT=performance.now();
+let pT=performance.now(),qAcc=0,qN=0,qLvl=0;
 function frame(){
-  const t=clock.getElapsedTime();const nw=performance.now(),dtt=Math.min(.05,(nw-pT)/1000);pT=nw;
+  const t=clock.getElapsedTime();const nw=performance.now(),dtt=Math.min(.05,(nw-pT)/1000);pT=nw;qAcc+=dtt;qN++;if(qN>=150){if(qAcc/qN>.045&&qLvl<2&&!/[?&]hq/.test(location.search)){qLvl++;renderer.setPixelRatio(Math.max(.6,Math.min(devicePixelRatio,1.5)*Math.pow(.7,qLvl)));resize()}qAcc=0;qN=0}
   prog=NAV.p/(NAV.NS-1);smooth+=(prog-smooth)*(reduce?1:(1-Math.exp(-dtt*3.4)));const v=Math.abs(smooth-last)/Math.max(.004,dtt)*.016;vel+=(v*40-vel)*(1-Math.exp(-dtt*7));last=smooth;NAV.render(smooth*(NAV.NS-1));
   smx+=(mx-smx)*.05;smy+=(my-smy)*.05;
   const f=smooth*5,i=Math.min(4,Math.floor(f)),e=ease(f-i),a=stops[i],b=stops[i+1];
