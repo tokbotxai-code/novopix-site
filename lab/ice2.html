@@ -18,7 +18,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;justify-conten
 .stage{position:fixed;inset:0;z-index:4;display:flex;align-items:flex-end;padding:96px max(22px,env(safe-area-inset-left)) 120px;pointer-events:none;visibility:hidden}
 .stage.right{justify-content:flex-end}
 .card{pointer-events:none;background:rgba(9,11,14,.52);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);padding:22px 24px;width:min(460px,100%);max-height:calc(100vh - 230px);overflow:auto;scrollbar-width:none}.card::-webkit-scrollbar{display:none}
-.stage.act .card{pointer-events:auto}.card.wide{width:min(720px,100%)}
+.stage.act .card{pointer-events:auto}.card.wide{width:min(720px,100%)}#s1 .card{width:min(560px,100%)}@media(min-width:701px){.stage{padding-bottom:34px}.card{max-height:calc(100vh - 128px)}#s1 h2{font-size:30px;margin:8px 0 6px}#s1 p{margin:0 0 4px}}@media(min-width:701px){#s1 .row{padding:9px 0}#s1 .row b{font-size:16px}#s1 .row span{font-size:13.5px;line-height:1.4}#s1 .tg{margin-top:3px;font-size:10px}}
 .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--frost);display:flex;gap:14px;align-items:center}.eyebrow:before{content:"";width:28px;height:1px;background:var(--frost)}
 h2{font-family:var(--display);font-weight:800;font-size:clamp(24px,3vw,40px);line-height:1.08;margin:14px 0 12px;letter-spacing:-.01em}
 p{color:var(--frost);font-size:15px;margin:0 0 14px}
