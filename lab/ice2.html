@@ -14,7 +14,7 @@ a{color:inherit;text-decoration:none}
 #loader{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-size:11px;letter-spacing:.3em;color:var(--frost);transition:opacity 1.2s}
 #loader b{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:.1em;color:var(--ice)}#loader.out{opacity:0;pointer-events:none}
 header{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;justify-content:space-between;align-items:center;padding:calc(16px + env(safe-area-inset-top)) max(22px,env(safe-area-inset-left)) 14px;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
-.logo{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.08em;cursor:pointer}header a.n{color:var(--frost)}header a.n:hover{color:var(--ice)}
+.logo{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:.08em;cursor:pointer;background:linear-gradient(90deg,#7ee6ff,#b49bff 60%,#ff9ad5);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}header a.n{color:var(--frost)}header a.n:hover{color:var(--ice)}
 .stage{position:fixed;inset:0;z-index:4;display:flex;align-items:flex-end;padding:96px max(22px,env(safe-area-inset-left)) 120px;pointer-events:none;visibility:hidden}
 .stage.right{justify-content:flex-end}
 .card{pointer-events:none;background:rgba(9,11,14,.52);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);padding:22px 24px;width:min(460px,100%);max-height:calc(100vh - 230px);overflow:auto;scrollbar-width:none}.card::-webkit-scrollbar{display:none}
@@ -29,7 +29,7 @@ p{color:var(--frost);font-size:15px;margin:0 0 14px}
 .pg{margin:14px 0 6px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--frost)}.pr{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);padding:9px 0;color:var(--frost)}.pr small{display:block;font-size:12px}.pr b{color:var(--ice);font-family:var(--display);font-weight:800;font-size:22px}
 .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .mail{font-size:13px;letter-spacing:.14em;user-select:all;color:var(--ice)}
-.hud{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom));left:0;right:0;z-index:6;display:flex;justify-content:center;align-items:center;gap:14px;pointer-events:none}.hud>*{pointer-events:auto}
+.hud{display:none!important;position:fixed;bottom:calc(18px + env(safe-area-inset-bottom));left:0;right:0;z-index:6;display:flex;justify-content:center;align-items:center;gap:14px;pointer-events:none}.hud>*{pointer-events:auto}
 .arrow{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(9,11,14,.45);color:var(--ice);font-size:18px;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.arrow:hover{border-color:var(--ice)}.arrow[disabled]{opacity:.25;cursor:default}
 .pips{display:flex;gap:6px;align-items:center}.pip{width:24px;height:2px;background:var(--line);border:0;padding:0;cursor:pointer;transition:.4s}.pip.on{width:44px;background:var(--ice)}
 :focus-visible{outline:2px solid var(--ice);outline-offset:3px}
@@ -89,6 +89,11 @@ const NAV=(function(){var NS=6,NAMES=['Home','Products','Services','Process','Pr
  var noClick=0;addEventListener('click',function(e){if(Date.now()<noClick){e.preventDefault();e.stopPropagation()}},true);
  function endDrag(){if(!drag)return;if(drag.mode==='x'){noClick=Date.now()+350;var d=target-drag.t;target=Math.max(0,Math.min(NS-1,Math.round(drag.t+(Math.abs(d)>.12?Math.sign(d)*Math.max(1,Math.round(Math.abs(d))):0))))}drag=null}
  addEventListener('pointerup',endDrag);addEventListener('pointercancel',endDrag);
+ var lastAct=Date.now(),lastAdv=Date.now();function act(){lastAct=Date.now()}
+ ['wheel','keydown','pointerdown','touchstart'].forEach(function(ev){addEventListener(ev,act,{passive:true})});
+ addEventListener('pointermove',function(e){if(e.target.closest&&e.target.closest('.card'))act()},{passive:true});
+ var DWELL=[7000,9000,9000,10000,11000,9000];
+ if(!reduce)setInterval(function(){if(document.hidden||!window.ready)return;var now=Date.now();if(now-lastAct<12000)return;var cur=Math.round(target);if(now-lastAdv<(DWELL[cur]||9000))return;lastAdv=now;go(cur>=NS-1?0:cur+1)},500);
  var h0=parseInt((location.hash||'').slice(1));if(h0>=0&&h0<NS)p=target=h0;
  var o={NS:NS,get p(){return target},
   render:function(pp){var cur=Math.max(0,Math.min(NS-1,Math.round(pp)));
@@ -147,7 +152,7 @@ function word(txt,w){
     vertexShader:`uniform float uT,uV;varying vec2 vU;void main(){vU=uv;vec3 p=position;p.z+=sin(p.x*.6+uT)*.25*uV*8.;p.y+=sin(p.x*.4+uT*1.3)*uV*3.;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
     fragmentShader:`uniform sampler2D tM;uniform float uV;varying vec2 vU;void main(){float o=.003+uV*.05;
       float r=texture2D(tM,vU+vec2(o,0.)).a,g=texture2D(tM,vU).a,b=texture2D(tM,vU-vec2(o,0.)).a;
-      gl_FragColor=vec4(vec3(r,g,b)*.85,max(r,max(g,b))*.9);}`});
+      vec3 tn=mix(vec3(.45,.9,1.),vec3(.85,.62,1.),smoothstep(.15,.85,vU.x));gl_FragColor=vec4(vec3(r,g,b)*tn*1.05,max(r,max(g,b))*.9);}`});
   const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,w/4,64,16),m);
   words.push({mesh,cv,txt,tex});return mesh;
 }
@@ -415,7 +420,7 @@ const glbReady=new Promise(res=>{if(!THREE.GLTFLoader){res();return}
 const lp=document.getElementById('lp');let pct=0;const tick=setInterval(()=>{pct=Math.min(95,pct+7);lp.textContent='FREEZING '+pct+'%';},60);
 (document.fonts?Promise.all([document.fonts.load('800 100px InterD'),document.fonts.load('400 16px InterW'),document.fonts.load('600 16px InterW'),glbReady]):glbReady).catch(()=>{}).then(()=>{
   words.forEach(w=>{const x=w.cv.getContext('2d');x.clearRect(0,0,2048,512);x.fillStyle='#fff';x.font='800 300px InterD, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(w.txt,1024,270);w.tex.needsUpdate=true;});
-  clearInterval(tick);lp.textContent='FREEZING 100%';setTimeout(()=>document.getElementById('loader').classList.add('out'),300);
+  clearInterval(tick);lp.textContent='FREEZING 100%';setTimeout(()=>{document.getElementById('loader').classList.add('out');window.ready=true},300);
 });
 frame();
 })();
