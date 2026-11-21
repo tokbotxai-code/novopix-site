@@ -93,7 +93,7 @@ const NAV=(function(){var NS=6,NAMES=['Home','Products','Services','Process','Pr
  ['wheel','keydown','pointerdown','touchstart'].forEach(function(ev){addEventListener(ev,act,{passive:true})});
  addEventListener('pointermove',function(e){if(e.target.closest&&e.target.closest('.card'))act()},{passive:true});
  var DWELL=[7000,9000,9000,10000,11000,9000];
- if(!reduce)setInterval(function(){if(document.hidden||!window.ready)return;var now=Date.now();if(now-lastAct<12000)return;var cur=Math.round(target);if(now-lastAdv<(DWELL[cur]||9000))return;lastAdv=now;go(cur>=NS-1?0:cur+1)},500);
+ if(!reduce&&!/[?&]noauto/.test(location.search))setInterval(function(){if(document.hidden||!window.ready)return;var now=Date.now();if(now-lastAct<12000)return;var cur=Math.round(target);if(now-lastAdv<(DWELL[cur]||9000))return;lastAdv=now;go(cur>=NS-1?0:cur+1)},500);
  var h0=parseInt((location.hash||'').slice(1));if(h0>=0&&h0<NS)p=target=h0;
  var o={NS:NS,get p(){return target},
   render:function(pp){var cur=Math.max(0,Math.min(NS-1,Math.round(pp)));
