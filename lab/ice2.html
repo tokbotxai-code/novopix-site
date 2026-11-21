@@ -33,7 +33,7 @@ p{color:var(--frost);font-size:15px;margin:0 0 14px}
 .arrow{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(9,11,14,.45);color:var(--ice);font-size:18px;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.arrow:hover{border-color:var(--ice)}.arrow[disabled]{opacity:.25;cursor:default}
 .pips{display:flex;gap:6px;align-items:center}.pip{width:24px;height:2px;background:var(--line);border:0;padding:0;cursor:pointer;transition:.4s}.pip.on{width:44px;background:var(--ice)}
 :focus-visible{outline:2px solid var(--ice);outline-offset:3px}
-@media(max-width:700px){.stage{padding:84px 18px 116px}.card,.card.wide{max-height:calc(100vh - 215px)}.cols{grid-template-columns:1fr;gap:0}header a.n{display:none}}
+@media(max-width:700px){.stage{padding:84px 18px 22px}.card,.card.wide{max-height:52vh}.cols{grid-template-columns:1fr;gap:0}header a.n{display:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 .nogl .stage{position:static;visibility:visible!important;opacity:1!important;transform:none!important;padding:40px 22px}.nogl{overflow:auto}.nogl body{overflow:auto}.nogl #gl,.nogl .hud,.nogl #loader{display:none}.nogl .card{max-height:none;pointer-events:auto}
 </style></head><body>
@@ -152,7 +152,7 @@ function word(txt,w){
     vertexShader:`uniform float uT,uV;varying vec2 vU;void main(){vU=uv;vec3 p=position;p.z+=sin(p.x*.6+uT)*.25*uV*8.;p.y+=sin(p.x*.4+uT*1.3)*uV*3.;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
     fragmentShader:`uniform sampler2D tM;uniform float uV;varying vec2 vU;void main(){float o=.003+uV*.05;
       float r=texture2D(tM,vU+vec2(o,0.)).a,g=texture2D(tM,vU).a,b=texture2D(tM,vU-vec2(o,0.)).a;
-      vec3 tn=mix(vec3(.45,.9,1.),vec3(.85,.62,1.),smoothstep(.15,.85,vU.x));gl_FragColor=vec4(vec3(r,g,b)*tn*1.05,max(r,max(g,b))*.9);}`});
+      vec3 tn=mix(vec3(.45,.9,1.),vec3(.85,.62,1.),smoothstep(.15,.85,vU.x));gl_FragColor=vec4(vec3(r,g,b)*tn*.9,max(r,max(g,b))*.5);}`});
   const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,w/4,64,16),m);
   words.push({mesh,cv,txt,tex});return mesh;
 }
@@ -206,6 +206,7 @@ function iceMat(seed,o={}){
         vec3 inside=bg*tint*(.75+dens*.35)+vec3(.85,.93,1.)*dens*.06;
         vec3 col=mix(inside,env(reflect(V,N)),fr);
         col+=vec3(.9,.96,1.)*(bub+crk);
+        float gl=step(1.5,uRefl);vec3 RR=reflect(V,N);float sp=pow(max(dot(RR,normalize(vec3(.4,.8,.5))),0.),40.)+pow(max(dot(RR,normalize(vec3(-.7,.3,.6))),0.),56.)*.8+pow(max(dot(RR,normalize(vec3(.1,-.4,.9))),0.),70.)*.6;col+=vec3(.92,.96,1.)*sp*2.2*gl;col+=vec3(.45,.62,.85)*pow(1.-max(dot(N,-V),0.),2.2)*.45*gl;
         // edge glow on ridges
         col+=pow(ridge(vPl*2.4+uSeed),18.)*.35*uFacet;
         gl_FragColor=vec4(col,1.);}`
@@ -234,12 +235,12 @@ const stops=[
   {pos:new THREE.Vector3(-9,-62,-94),cam:new THREE.Vector3(3.2,1.2,8.5),roll:.05},
   {pos:new THREE.Vector3(0,-80,-118),cam:new THREE.Vector3(0,.4,11),roll:0}
 ];
-const anim=[],MODELS={};
+const anim=[],MODELS={},GROUPS={};
 const labels=['NOVOPIX','PRODUCTS','SERVICES','PROCESS','PRICES','HELLO'];
 
 /* Scene 1 — glass orb with a snow storm inside, title refracted behind */
-{const g=new THREE.Group();g.position.copy(stops[0].pos);scene.add(g);
-  const t=word(labels[0],16);t.position.set(0,0,-4.5);g.add(t);
+{const g=new THREE.Group();g.position.copy(stops[0].pos);scene.add(g);GROUPS[0]=g;
+  const t=word(labels[0],11);t.position.set(0,0,-4.5);g.add(t);
   const orb=ice(new THREE.SphereGeometry(2.3,160,160),1.3,{ior:.16,bub:.6,crack:.25,facet:.15,disp:.03});g.add(orb);
   const s=swarm(7000,20,.45);g.add(s);const P=s.geometry.attributes.position,S=[];
   for(let i=0;i<P.count;i++)S.push([Math.random()*6.283,Math.pow(Math.random(),.5)*1.9,(Math.random()-.5)*2.4,.3+Math.random()*.9,Math.random()]);
@@ -249,8 +250,8 @@ const labels=['NOVOPIX','PRODUCTS','SERVICES','PROCESS','PRICES','HELLO'];
 }
 
 /* Scene 2 — faceted crystal inside a 3D line lattice */
-{const g=new THREE.Group();g.position.copy(stops[1].pos);scene.add(g);
-  const t=word(labels[1],13);t.position.set(0,.2,-5);g.add(t);
+{const g=new THREE.Group();g.position.copy(stops[1].pos);scene.add(g);GROUPS[1]=g;
+  const t=word(labels[1],9.5);t.position.set(0,.2,-5);g.add(t);
   const geo=new THREE.OctahedronGeometry(1.6,40);geo.scale(1,1.45,1);
   const c=ice(geo,4.2,{ior:.13,bub:1,crack:1.2,facet:1.4,disp:.12});g.add(c);MODELS.crystal=c;
   const pts=[],S=1.2,N=8;
@@ -267,8 +268,8 @@ const labels=['NOVOPIX','PRODUCTS','SERVICES','PROCESS','PRICES','HELLO'];
 }
 
 /* Scene 3 — raw ice boulder in drifting dust */
-{const g=new THREE.Group();g.position.copy(stops[2].pos);scene.add(g);
-  const t=word(labels[2],15);t.position.set(0,0,-5);g.add(t);
+{const g=new THREE.Group();g.position.copy(stops[2].pos);scene.add(g);GROUPS[2]=g;
+  const t=word(labels[2],10);t.position.set(0,0,-5);g.add(t);
   const geo=new THREE.IcosahedronGeometry(1.9,48);geo.scale(1.15,1.35,.9);
   const r=ice(geo,7.7,{ior:.12,bub:1.4,crack:1.6,facet:1.8,disp:.32});g.add(r);MODELS.boulder=r;
   const d=swarm(2500,28,.7);const P=d.geometry.attributes.position;
@@ -277,8 +278,8 @@ const labels=['NOVOPIX','PRODUCTS','SERVICES','PROCESS','PRICES','HELLO'];
 }
 
 /* Scene 4 — exploded shards orbiting a core */
-{const g=new THREE.Group();g.position.copy(stops[3].pos);scene.add(g);
-  const t=word(labels[3],10);t.position.set(0,0,-5);g.add(t);
+{const g=new THREE.Group();g.position.copy(stops[3].pos);scene.add(g);GROUPS[3]=g;
+  const t=word(labels[3],8);t.position.set(0,0,-5);g.add(t);
   const core=ice(new THREE.IcosahedronGeometry(.9,24),9.1,{ior:.15,bub:1,crack:1,facet:1.6,disp:.15});g.add(core);
   const sh=[];for(let i=0;i<34;i++){const gg=new THREE.TetrahedronGeometry(.25+Math.random()*.55,6);gg.scale(1,1.6+Math.random(),1);
     const m=ice(gg,10+i,{ior:.1,bub:.4,crack:.8,facet:1.4,disp:.1});m.userData={a:Math.random()*6.283,r:1.6+Math.random()*2.6,y:(Math.random()-.5)*3.2,sp:.08+Math.random()*.3};g.add(m);sh.push(m);}MODELS.shards=sh;
@@ -286,8 +287,8 @@ const labels=['NOVOPIX','PRODUCTS','SERVICES','PROCESS','PRICES','HELLO'];
 }
 
 /* Scene 5 — ice knot for the prices */
-{const g=new THREE.Group();g.position.copy(stops[4].pos);scene.add(g);
-  const t=word(labels[4],12);t.position.set(0,0,-5);g.add(t);
+{const g=new THREE.Group();g.position.copy(stops[4].pos);scene.add(g);GROUPS[4]=g;
+  const t=word(labels[4],9);t.position.set(0,0,-5);g.add(t);
   const k=ice(new THREE.TorusKnotGeometry(1.25,.46,260,40),12.4,{ior:.13,bub:.9,crack:1.1,facet:1.2,disp:.1});g.add(k);MODELS.knot=k;
   const d=swarm(1800,26,.6);const P=d.geometry.attributes.position;
   for(let i=0;i<P.count;i++){const a=Math.random()*6.283,rr=2.4+Math.random()*2.6;P.setXYZ(i,Math.cos(a)*rr,(Math.random()-.5)*4.5,Math.sin(a)*rr);}g.add(d);
@@ -296,7 +297,7 @@ const labels=['NOVOPIX','PRODUCTS','SERVICES','PROCESS','PRICES','HELLO'];
 
 /* Scene 6 — particle sculpture that morphs on hover */
 const MOB=innerWidth<700;const PN=MOB?6000:12000,foot=swarm(PN,60);foot.position.copy(stops[5].pos);scene.add(foot);
-{const t=word(labels[5],12);t.position.copy(stops[5].pos).add(new THREE.Vector3(0,0,-6));scene.add(t);}
+{const t=word(labels[5],9);t.position.copy(stops[5].pos).add(new THREE.Vector3(0,0,-6));scene.add(t);GROUPS.w5=t;}
 const shapes=[new Float32Array(PN*3),new Float32Array(PN*3),new Float32Array(PN*3),new Float32Array(PN*3)];
 for(let i=0;i<PN;i++){const u=Math.random(),v=Math.random(),j=i*3;
   // phone: outline + screen grid + notch
@@ -385,6 +386,10 @@ function frame(){
 
   sky.material.uniforms.uT.value=t;iceMats.forEach(m=>m.uniforms.uT.value=t);pmats.forEach(m=>m.uniforms.uT.value=t);
   words.forEach(w=>{w.mesh.material.uniforms.uT.value=t;w.mesh.material.uniforms.uV.value=Math.min(vel,.3);});
+  {const asp=innerWidth/innerHeight,port=asp<.85,fk=Math.min(1,asp/1.6),OFF=port?[[0,2.5],[0,2.6],[0,2.6],[0,2.6],[0,2.6],[0,2.4]]:[[2.7*fk,.1],[-2.9*fk,.2],[3.0*fk,.1],[-2.9*fk,.1],[3.4*fk,.3],[-2.8*fk,0]],SC=port?.62:.82;
+    for(let k=0;k<6;k++){const o=OFF[k],pos=stops[k].pos;
+      if(k<5){const G=GROUPS[k];if(G){G.position.set(pos.x+o[0],pos.y+o[1],pos.z);G.scale.setScalar(SC)}}
+      else{foot.position.set(pos.x+o[0],pos.y+o[1],pos.z);foot.scale.setScalar(SC);if(GROUPS.w5)GROUPS.w5.position.set(pos.x+o[0],pos.y+o[1],pos.z-6)}}}
   anim.forEach(fn=>fn(t,Math.min(vel,.3)));shaftMats.forEach(m=>m.uniforms.uT.value=t);
   scene.children.forEach(o=>{if(o.isGroup){o.rotation.x=smy*.3;o.rotation.z=-smx*.2;}});
   cx+=(rx-cx)*.18;cy+=(ry-cy)*.18;cur.style.transform=`translate(${cx}px,${cy}px)`;dot.style.transform=`translate(${rx}px,${ry}px)`;
@@ -410,11 +415,11 @@ const glbReady=new Promise(res=>{if(!THREE.GLTFLoader){res();return}
     const fit=(geo,s)=>{geo.center();geo.computeBoundingSphere();const k=s/geo.boundingSphere.radius;geo.scale(k,k,k);return geo;};
     const set=(mesh,geo,o)=>{mesh.geometry.dispose();mesh.geometry=geo;for(const k in o)mesh.material.uniforms[k].value=o[k];};
     const C=get('Crystal'),B=get('Boulder'),F=get('Floe');
-    if(C&&MODELS.crystal)set(MODELS.crystal,fit(C.geometry.clone(),2.5),{uDisp:0,uFacet:.06,uBub:.12,uCrack:.08,uIOR:.2,uRefl:3.4,uFrost:.04});
-    if(B&&MODELS.boulder)set(MODELS.boulder,fit(B.geometry.clone(),2.3),{uDisp:0,uFacet:.06,uBub:.12,uCrack:.08,uIOR:.2,uRefl:3.4,uFrost:.04});
-    if(C&&MODELS.knot){set(MODELS.knot,fit(C.geometry.clone(),2.7),{uDisp:0,uFacet:.06,uBub:.12,uCrack:.08,uIOR:.2,uRefl:3.4,uFrost:.04});MODELS.knot.rotation.set(0,0,0);MODELS.knotCrystal=true}
+    if(C&&MODELS.crystal)set(MODELS.crystal,fit(C.geometry.clone(),2.5),{uDisp:0,uFacet:.06,uBub:.12,uCrack:.08,uIOR:.2,uRefl:4.2,uFrost:.04});
+    if(B&&MODELS.boulder)set(MODELS.boulder,fit(B.geometry.clone(),2.3),{uDisp:0,uFacet:.06,uBub:.12,uCrack:.08,uIOR:.2,uRefl:4.2,uFrost:.04});
+    if(C&&MODELS.knot){set(MODELS.knot,fit(C.geometry.clone(),2.7),{uDisp:0,uFacet:.06,uBub:.12,uCrack:.08,uIOR:.2,uRefl:4.2,uFrost:.04});MODELS.knot.rotation.set(0,0,0);MODELS.knotCrystal=true}
     const sh=[];gl.scene.traverse(o=>{if(o.isMesh&&o.name.indexOf('Shard')===0)sh.push(o.geometry)});
-    if(sh.length&&MODELS.shards)MODELS.shards.forEach((m,i)=>set(m,fit(sh[i%sh.length].clone(),.35+Math.random()*.5),{uDisp:0,uFacet:.06,uBub:.12,uCrack:.08,uIOR:.2,uRefl:3.4,uFrost:.04}));
+    if(sh.length&&MODELS.shards)MODELS.shards.forEach((m,i)=>set(m,fit(sh[i%sh.length].clone(),.35+Math.random()*.5),{uDisp:0,uFacet:.06,uBub:.12,uCrack:.08,uIOR:.2,uRefl:4.2,uFrost:.04}));
     if(F)[1,2,3,4].forEach(i=>{const m=ice(fit(F.geometry.clone(),3.4),20+i,{ior:.14,bub:.15,crack:.1,facet:.08,disp:0});m.material.uniforms.uRefl.value=2;m.material.uniforms.uFrost.value=.06;m.position.copy(stops[i].pos).add(new THREE.Vector3(0,-4.2,-1.5));m.rotation.y=i*1.3;scene.add(m)});
    }catch(e){}res()},undefined,()=>res())});
 const lp=document.getElementById('lp');let pct=0;const tick=setInterval(()=>{pct=Math.min(95,pct+7);lp.textContent='FREEZING '+pct+'%';},60);
