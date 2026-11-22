@@ -32,6 +32,13 @@ bar.innerHTML=pl?'<span>Black Friday: −50% na wszystkie ceny · 24–30 listop
 document.body.insertBefore(bar,document.body.firstChild);
 var note=document.createElement('p');note.className='sale-note';
 note.textContent=pl?'Promocja Black Friday: −50% od cen na liście dla projektów potwierdzonych na piśmie od 24 do 30 listopada 2026. Opieka miesięczna: cena promocyjna przez pierwsze 3 miesiące, potem cena regularna. Ceny regularne są pokazane jako przekreślone. Ceny netto.':'Black Friday: 50% off the listed prices for projects confirmed in writing between 24 and 30 November 2026. Monthly care: the sale price applies for the first 3 months, then the regular price. Regular prices are shown crossed out. Prices exclude VAT.';
+var cf=document.getElementById('cf');
+if(cf&&!cf.querySelector('input[name=sale]')){
+ var hid=document.createElement('input');hid.type='hidden';hid.name='sale';hid.value='bf2026';cf.appendChild(hid);
+ var fn=document.createElement('p');fn.className='sale-note';fn.style.margin='10px 0';
+ fn.textContent=pl?'Black Friday: wspomnij o tym w wiadomości. Cena promocyjna dotyczy projektów potwierdzonych na piśmie do 30 listopada.':'Black Friday: mention it in your message. The sale price applies to projects confirmed in writing by 30 November.';
+ var sb=cf.querySelector('button[type=submit],button:not([type]),input[type=submit]');
+ if(sb&&sb.parentNode)sb.parentNode.insertBefore(fn,sb);else cf.appendChild(fn)}
 var host=document.querySelector('#pricing .w')||document.querySelector('main')||document.body;
 if(onPricing||document.getElementById('pricing'))host.appendChild(note);
 })();

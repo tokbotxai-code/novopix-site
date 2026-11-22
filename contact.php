@@ -23,8 +23,11 @@ if (is_file($f)) { $hits = array_filter(array_map('intval', explode(',', (string
 if (count($hits) >= 5) out(429, false, 'limit');
 $hits[] = $now; @file_put_contents($f, implode(',', $hits));
 $clean = fn($s) => str_replace(["\r", "\n"], ' ', $s);
-$subject = 'NovoPix: ' . ($lang === 'pl' ? 'wiadomość od ' : 'message from ') . $clean($name) . ' [' . strtoupper($lang) . ']';
-$body = $msg . "\n\n--\n" . $name . " <" . $email . ">\nLanguage: " . $lang . "\nIP: " . $ip . "\n";
+// Black Friday 2026 (24-30.11, UTC = czas UK w listopadzie): zapytanie z akcji dostaje znacznik w temacie i w tresci. Data sprawdzana po stronie serwera.
+function bf2026_active(int $t): bool { return $t >= 1795478400 && $t < 1796083200; }
+$bf = (($_POST['sale'] ?? '') === 'bf2026') && bf2026_active(time());
+$subject = 'NovoPix: ' . ($lang === 'pl' ? 'wiadomość od ' : 'message from ') . $clean($name) . ' [' . strtoupper($lang) . ']' . ($bf ? ' [BLACK FRIDAY -50%]' : '');
+$body = $msg . "\n\n--\n" . $name . " <" . $email . ">\nLanguage: " . $lang . "\nIP: " . $ip . "\n" . ($bf ? "Sale: Black Friday 2026 (-50%), asked during the sale window\n" : "");
 $headers = "From: NovoPix <contact@novopix.uk>\r\nReply-To: " . $clean($email) . "\r\nContent-Type: text/plain; charset=UTF-8\r\n";
 $sent = @mail('contact@novopix.uk', '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, $headers, '-fcontact@novopix.uk');
 if (!$sent) out(500, false, 'fail');
