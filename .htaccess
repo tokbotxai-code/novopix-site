@@ -23,5 +23,5 @@ RewriteEngine On
 RewriteRule ^watchdog\.php$ - [F,L]
 </IfModule>
 
-# Web app manifests (Fikol installable game).
+# Web app manifests (installable games).
 AddType application/manifest+json .webmanifest
