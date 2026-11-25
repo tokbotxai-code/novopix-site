@@ -7,7 +7,7 @@ Stan: gra jest PWA (manifest, ikony, service worker, działa offline, zero zewn�
 
 ## 2. Paczka Androida: wybierz jedną drogę
 **A. PWABuilder (najprostsza, w przeglądarce, bez Android Studio):**
-1. Wejdź na https://www.pwabuilder.com i wpisz https://novopix.uk/novojet/ .
+1. Wejdź na https://www.pwabuilder.com i wpisz https://novojet.novopix.uk/ .
 2. Wybierz „Package for stores → Android”, nazwa pakietu `uk.novopix.aquaforce`, zapisz wygenerowany plik podpisu (keystore) w bezpiecznym miejscu (bez niego nie wydasz aktualizacji).
 3. Pobierz plik `.aab` i dołóż do Play Console. UWAGA: TWA wymaga pliku `https://novopix.uk/.well-known/assetlinks.json` z odciskiem SHA-256 klucza podpisu. Plik ten dodaję ja po podaniu odcisku (z Play Console: Konfiguracja → Integralność aplikacji → klucz podpisu aplikacji).
 
@@ -19,7 +19,7 @@ Stan: gra jest PWA (manifest, ikony, service worker, działa offline, zero zewn�
 ## 3. Karta sklepu
 - Teksty EN/PL, kategorie i odpowiedzi do formularzy: `store/LISTING.md`.
 - Grafiki: `store/icon-512.png`, `store/feature-graphic-1024x500.png`, zrzuty `store/screenshot-*.png`.
-- Adres polityki prywatności: https://novopix.uk/novojet/privacy.html
+- Adres polityki prywatności: https://novojet.novopix.uk/privacy.html
 
 ## 4. Testy przed publikacją
 - Play wymaga zwykle testu zamkniętego (ok. 12 testerów przez 14 dni) dla nowych kont osobistych. Konto organizacji (firmowe) bywa zwolnione. Sprawdź w Play Console, które wymagania dotyczą Twojego konta.
