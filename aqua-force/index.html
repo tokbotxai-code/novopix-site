@@ -84,7 +84,7 @@ function tankSprite(){const c=document.createElement('canvas');c.width=10;c.heig
 const L={F:['111','100','110','100','100'],U:['101','101','101','101','111'],E:['111','100','110','100','111'],L:['100','100','100','100','111']};
 [...'FUEL'].forEach((ch,i)=>{x.fillStyle=i%2?C.w:C.lr;x.fillRect(0,i*6,10,6);x.fillStyle=i%2?C.b:C.w;L[ch].forEach((r,j)=>[...r].forEach((v,k)=>{if(v==='1')x.fillRect(3+k,i*6+j,1,1)}))});return c}
 S.f=tankSprite();
-let rows,ents,ebul,bul,parts,off,rowc,sec,spd=1,score,lives,fuel,p,state,tick,gen,keys={},pause=0,lvl=1,AC,eng,vx=0,steer=0,paused=false,fireTap=0,nextLife=3000,msg='',msgT=0,inv=0,thr=0;
+let rows,ents,ebul,buls=[],fcd=0,parts,off,rowc,sec,spd=1,score,lives,fuel,p,state,tick,gen,keys={},pause=0,lvl=1,AC,eng,vx=0,steer=0,paused=false,fireTap=0,nextLife=3000,msg='',msgT=0,inv=0,thr=0;
 function pine(x,y,c){g.fillStyle=c;g.fillRect(x+2,y,2,2);g.fillRect(x+1,y+2,4,2);g.fillRect(x,y+4,6,3);g.fillRect(x+2,y+7,2,1)}
 function band(y,h,stops){const gr=g.createLinearGradient(0,y,0,y+h);stops.forEach((c,i)=>{gr.addColorStop(i/stops.length,c);gr.addColorStop((i+1)/stops.length-.001,c)});return gr}
 const LOGO=['#ffd23f','#ff9a3c','#e0402a','#a03ab0'];
@@ -133,7 +133,7 @@ function mkRow(spawn){
  return row;
 }
 function reset(full){
- gen=newGen();gen.n=30;rows=[];ents=[];ebul=[];bul=null;parts=[];off=0;sec=0;
+ gen=newGen();gen.n=30;rows=[];ents=[];ebul=[];buls=[];fcd=0;parts=[];off=0;sec=0;
  if(full){score=0;lives=3;rowc=0;lvl=1;nextLife=3000}
  for(let i=0;i<N;i++)rows.push(mkRow(false));
  p={x:W/2-7,y:SHIP,w:14,h:14};vx=0;fuel=100;spd=1;
@@ -159,7 +159,7 @@ function update(){
  spd+=(Math.max(.5,Math.min(3,base+(th>0?th*1.3:th*.5)))-spd)*.28;const sp=spd;
  const dir=(keys.ArrowLeft||keys.a?-1:0)+(keys.ArrowRight||keys.d?1:0);
  {const sv0=dir||steer,tv=Math.sign(sv0)*Math.pow(Math.abs(sv0),1.4)*3.6;vx+=(tv-vx)*(dir?.6:.4)}p.x=Math.max(0,Math.min(W-p.w,p.x+vx));
- if(fireTap>0)fireTap--;if((keys[' ']||keys.fire||fireTap>0)&&!bul){bul={x:p.x+p.w/2,y:p.y};tone(1400,.09,'sawtooth',220,.035)}
+ if(fireTap>0)fireTap--;if(fcd>0)fcd--;if((keys[' ']||keys.fire||fireTap>0)&&fcd<=0&&buls.length<5){buls.push({x:p.x+p.w/2,y:p.y});fcd=7;tone(1400,.09,'sawtooth',220,.035)}
  off+=sp;
  while(off>=RH){off-=RH;rows.unshift(mkRow(true));rows.pop()}
  ents.forEach(e=>{
@@ -176,12 +176,12 @@ function update(){
  });
  ents=ents.filter(e=>e.y<H+20&&e.x>-40&&e.x<W+40);
  ebul.forEach(q=>{q.x+=q.vx;q.y+=q.vy});ebul=ebul.filter(q=>q.x>-8&&q.x<W+8&&q.y>-8&&q.y<H+8);
- if(bul){
+ for(let bi=buls.length-1;bi>=0;bi--){const bul=buls[bi];{
   bul.y-=7;
   const r=rowAt(bul.y);let hit=bul.y<-4;
   if(r&&r.b===1){rows.forEach(q=>{if(q.b===1)q.b=2});score+=500;lvl++;hit=true;msg='BRIDGE DESTROYED +500';msgT=100;noise(1.1,2000,90,.32);tone(90,.9,'sawtooth',25,.08);boom(bul.x,bul.y,40,'#8a8f96')}
-  for(const e of ents)if(bul&&!e.dead&&bul.x>e.x&&bul.x<e.x+e.w&&bul.y>e.y&&bul.y<e.y+e.h){score+=PTS[e.t];e.dead=1;hit=true;noise(.35,3000,300,.2);tone(220,.18,'square',60,.04);boom(e.x+e.w/2,e.y+e.h/2,14)}
-  ents=ents.filter(e=>!e.dead);if(hit)bul=null;
+  for(const e of ents)if(!e.dead&&bul.x>e.x&&bul.x<e.x+e.w&&bul.y>e.y&&bul.y<e.y+e.h){score+=PTS[e.t];e.dead=1;hit=true;noise(.35,3000,300,.2);tone(220,.18,'square',60,.04);boom(e.x+e.w/2,e.y+e.h/2,14)}
+  ents=ents.filter(e=>!e.dead);if(hit)buls.splice(bi,1)}
  }
  parts.forEach(q=>{q.x+=q.vx;q.y+=q.vy+spd*.3;q.l--});parts=parts.filter(q=>q.l>0);
  if(inv>0)inv--;
@@ -235,7 +235,7 @@ function draw(){
   else spr(S.tk,e.x,e.y);
  });
  ebul.forEach(q=>{g.fillStyle=tick%6<3?C.w:C.y;g.fillRect((q.x-1)|0,(q.y-1)|0,3,3)});
- if(bul){g.fillStyle=C.w;g.fillRect(bul.x-1,bul.y,2,6)}
+ g.fillStyle=C.w;for(const bul of buls)g.fillRect(bul.x-1,bul.y,2,6);
  if(state!=='play'||!(pause>0&&tick%6<3)){if(!(state==='over'&&pause>0)&&!(inv>0&&tick%8<4)){spr(S.p,p.x,p.y);if(state==='play'&&pause<=0){g.fillStyle=tick%4<2?C.o:C.y;g.fillRect((p.x+6)|0,(p.y+p.h)|0,2,2+tick%3)}}}
  parts.forEach(q=>{g.fillStyle=q.c;g.fillRect(q.x|0,q.y|0,2,2)});
  g.restore();
