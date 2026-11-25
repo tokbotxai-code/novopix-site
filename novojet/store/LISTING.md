@@ -39,3 +39,5 @@ Features
 ## Materiały w tym folderze
 - `icon-512.png` (ikona 512×512), `feature-graphic-1024x500.png`
 - `screenshot-1..4` (telefon pionowo 1080×1920), `screenshot-5-landscape.png` (poziomo 1920×1080)
+
+Uwaga (25.11): na stronie novopix.uk/games piszemy, że gra jest hołdem dla klasyka. W opisie sklepowym i tagach NIE używamy nazw cudzych gier ani marek.
