@@ -15,12 +15,13 @@ How to play
 - Slide the joystick left and right to steer.
 - Push it up to fly faster, pull it down to slow down. Let go and your jet cruises at normal speed.
 - Hold FIRE to shoot. Tap the game screen to shoot as well.
+- Tap the pause button in the corner to pause.
 - Fly through a fuel depot to refuel, or shoot it for points.
 - Blow up the bridge at the end of each section to reach the next one. The river gets narrower and the enemies get tougher.
 - Earn an extra life every 3000 points.
 
 Features
-- Classic arcade feel with a retro 8-bit palette and optional CRT scanline filter
+- Classic arcade feel with a retro 8-bit palette
 - Analog joystick: steer, speed up and slow down with one thumb
 - Endless sections with changing river colours and growing difficulty
 - Top 5 scores saved on your device
