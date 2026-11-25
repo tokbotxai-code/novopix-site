@@ -7,24 +7,25 @@
 <title>Aqua Force</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#352879;--fg:#a5a0e0;--panel:#2a1f66;--btn:#6c5eb5;--acc:#ffd23f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+:root{--bg:#352879;--fg:#a5a0e0;--panel:#2a1f66;--btn:#6c5eb5;--acc:#ffd23f;--ctl:clamp(84px,17dvh,118px);--w:min(calc(100vw - 16px),calc((100dvh - var(--ctl) - 34px - 44px) * .811),620px);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
-html,body{height:100%;margin:0;touch-action:manipulation}
+html,body{height:100%;height:100dvh;margin:0;touch-action:manipulation}
 body{background:var(--bg);color:var(--fg);font-family:"Press Start 2P",ui-monospace,Menlo,monospace;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;overflow:hidden}
-.scr{position:relative;width:min(100%,360px,calc(50vh*.811));aspect-ratio:240/296;border:8px solid var(--btn);background:#000}
+.scr{position:relative;width:var(--w);aspect-ratio:240/296;border:clamp(4px,1.4vw,8px) solid var(--btn);background:#000}
 canvas{width:100%;height:100%;display:block;image-rendering:pixelated;touch-action:none}
 .scr.crt::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(0,0,0,.34) 0,rgba(0,0,0,.34) 1px,transparent 1px,transparent 3px);box-shadow:inset 0 0 36px rgba(0,0,0,.6)}
-#pad{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;width:min(100%,360px);touch-action:none}
+#pad{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;width:var(--w);touch-action:none}
 #pad *{touch-action:none}
-#steer{grid-column:1/5;height:104px;background:var(--panel);border:3px solid var(--btn);border-radius:54px;position:relative}
+#steer{grid-column:1/5;height:var(--ctl);background:var(--panel);border:3px solid var(--btn);border-radius:calc(var(--ctl)/2);position:relative}
 .jb{position:absolute;inset:8px;border-radius:44px;background:radial-gradient(circle at 50% 40%,#3a2d8a,#241a5a);box-shadow:inset 0 4px 12px #0008}
 .jb::before{content:"";position:absolute;left:14%;right:14%;top:50%;height:2px;background:rgba(165,160,224,.25)}
-#jk{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#8f82d6,#5a4cae);border:3px solid var(--fg);box-shadow:0 4px 10px #0009;transition:transform .12s}
+#jk{position:absolute;left:50%;top:50%;width:calc(var(--ctl)*.54);height:calc(var(--ctl)*.54);margin:calc(var(--ctl)*-.27) 0 0 calc(var(--ctl)*-.27);border-radius:50%;background:radial-gradient(circle at 40% 35%,#8f82d6,#5a4cae);border:3px solid var(--fg);box-shadow:0 4px 10px #0009;transition:transform .12s}
 #steer.on #jk{background:radial-gradient(circle at 40% 35%,#ffe27a,#ffd23f);transition:none}
-#fire{grid-column:5/7;height:104px;font-size:11px;background:#e0402a;color:#fff}
+#fire{grid-column:5/7;height:var(--ctl);font-size:11px;background:#e0402a;color:#fff}
 #fire.on{background:var(--acc);color:#000}
 #start{grid-column:span 2;height:34px;font-size:10px}
 .tg{grid-column:span 2;font-size:7px}
+@media (orientation:landscape) and (max-height:520px){:root{--w:calc((100dvh - 24px) * .811);--ctl:clamp(66px,26dvh,100px)}body{flex-direction:row;gap:14px}#pad{width:min(calc(100vw - var(--w) - 48px),380px);align-content:center}}
 </style>
 </head>
 <body>
@@ -246,7 +247,7 @@ addEventListener('keydown',e=>{
 addEventListener('keyup',e=>{const k=e.key.length===1?e.key.toLowerCase():e.key;keys[k]=false});
 function holdBtn(id,k){const b=$(id);b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);keys[k]=true;b.classList.add('on')});['pointerup','pointercancel'].forEach(n=>b.addEventListener(n,()=>{keys[k]=false;b.classList.remove('on')}))}
 const st=$('steer');
-function sv(e){const r=st.getBoundingClientRect(),R=r.width/2-36,dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
+function sv(e){const r=st.getBoundingClientRect(),R=r.width/2-$('jk').offsetWidth/2-8,dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
  const kx=Math.max(-R,Math.min(R,dx)),ky=Math.max(-16,Math.min(16,dy*.4));$('jk').style.transform='translate('+kx+'px,'+ky+'px)';
  const a=kx/R,dz=.1;steer=Math.abs(a)<dz?0:Math.sign(a)*(Math.abs(a)-dz)/(1-dz)}
 function sEnd(){steer=0;st.classList.remove('on');$('jk').style.transform=''}
