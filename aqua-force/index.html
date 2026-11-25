@@ -25,6 +25,7 @@ canvas{width:100%;height:100%;display:block;image-rendering:pixelated;touch-acti
 .scr.crt::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(0,0,0,.34) 0,rgba(0,0,0,.34) 1px,transparent 1px,transparent 3px);box-shadow:inset 0 0 36px rgba(0,0,0,.6)}
 #pad{position:fixed;inset:0;pointer-events:none;z-index:5}
 #pad>*{pointer-events:auto;touch-action:none}
+#zone{position:absolute;left:0;top:calc(40*var(--u,1px));bottom:0;width:60%;touch-action:none}
 #steer{position:absolute;left:max(14px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));width:var(--sd);height:var(--sd);border-radius:50%;background:rgba(28,20,76,.5);border:3px solid rgba(165,160,224,.6)}
 .jb{position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle at 50% 40%,rgba(80,64,170,.55),rgba(36,26,90,.45));box-shadow:inset 0 4px 12px #0007}
 .jb::before{content:"";position:absolute;left:12%;right:12%;top:50%;height:2px;background:rgba(165,160,224,.25)}
@@ -46,7 +47,7 @@ canvas{width:100%;height:100%;display:block;image-rendering:pixelated;touch-acti
 <div id="splash" role="img" aria-label="NovoPix Studio"><img src="novopix-logo.svg" alt="" width="96" height="96"><div class="wm">Novo<i>Pix</i></div><div class="sb">STUDIO</div></div>
 <div class="scr" id="scr"><canvas id="c" width="240" height="296"></canvas><button id="pz" type="button" aria-label="Pause" hidden>II</button></div>
 <div id="pad">
-<div id="steer"><div class="jb"><div id="jk"></div></div></div>
+<div id="zone"></div><div id="steer"><div class="jb"><div id="jk"></div></div></div>
 <button id="fire">FIRE</button>
 </div>
 <script>
@@ -58,7 +59,7 @@ const C={k:'#000',w:'#fff',r:'#e0402a',c:'#4aa0ff',p:'#a03ab0',g:'#58b858',b:'#1
 function layout(force){
  const vw=innerWidth,vh=innerHeight;let bw=Math.min(vw,vh*.811);let ch=Math.max(296,Math.min(600,Math.round(240*vh/bw)));let bh=Math.round(bw*ch/240);if(bh>vh){bh=vh;bw=Math.round(vh*240/ch)}else if(vh-bh<=3)bh=vh;
  const sd=Math.max(104,Math.min(150,Math.min(vw,vh)*.26)),u=bw/240,outside=(vw-bw)/2>=sd+28;
- let ship=outside?ch-HUDH-40:Math.round((bh-sd-30)/u)-HUDH-22;ship=Math.max(Math.round((ch-HUDH)*.45),Math.min(ch-HUDH-40,ship));
+ let ship=ch-HUDH-34;
  const changed=force||ch!==CH||ship!==SHIP;
  const sc=$('scr');sc.style.width=bw+'px';sc.style.height=bh+'px';sc.style.setProperty('--u',u+'px');BW=bw;BH=bh;
  if(changed){CH=ch;H=CH-HUDH;N=H/RH+2;SHIP=ship;cv.width=W;cv.height=CH;g.imageSmoothingEnabled=false;if(typeof state!=='undefined'&&state)reset(state==='title'?true:false)}
@@ -278,6 +279,10 @@ function sv(e){if(!jr)jcache();let dx=e.clientX-jr.cx,dy=e.clientY-jr.cy;const L
  jkEl.style.transform='translate3d('+dx+'px,'+dy+'px,0)';
  const a=dx/R,dz=.07;steer=Math.abs(a)<dz?0:Math.sign(a)*(Math.abs(a)-dz)/(1-dz);const t=-dy/R;thr=Math.abs(t)<.14?0:Math.sign(t)*(Math.abs(t)-.14)/.86}
 function sEnd(){steer=0;thr=0;jr=null;st.classList.remove('on');if(jkEl){jkEl.style.transition='transform .08s';jkEl.style.transform='';setTimeout(()=>{if(jkEl)jkEl.style.transition='none'},100)}}
+const zn=$('zone');function homeSt(){st.style.left='';st.style.top='';st.style.bottom=''}
+zn.addEventListener('pointerdown',e=>{e.preventDefault();zn.setPointerCapture(e.pointerId);const d=st.offsetWidth,x=Math.max(8,Math.min(innerWidth-d-8,e.clientX-d/2)),y=Math.max(8,Math.min(innerHeight-d-8,e.clientY-d/2));st.style.left=x+'px';st.style.top=y+'px';st.style.bottom='auto';jcache();jkEl.style.transition='none';st.classList.add('on');if(state!=='play')start();if(paused){togglePause()}jr.cx=x+d/2;jr.cy=y+d/2;sv(e)});
+zn.addEventListener('pointermove',e=>{e.preventDefault();if(jr)sv(e)},{passive:false});
+['pointerup','pointercancel','lostpointercapture'].forEach(n=>zn.addEventListener(n,()=>{sEnd();homeSt()}));
 st.addEventListener('pointerdown',e=>{e.preventDefault();st.setPointerCapture(e.pointerId);jcache();jkEl.style.transition='none';st.classList.add('on');if(state!=='play')start();sv(e)});
 st.addEventListener('pointermove',e=>{e.preventDefault();if(jr)sv(e)},{passive:false});
 ['pointerup','pointercancel','lostpointercapture'].forEach(n=>st.addEventListener(n,sEnd));
