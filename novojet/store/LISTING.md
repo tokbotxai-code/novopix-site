@@ -1,8 +1,8 @@
 # NovoJet: Google Play listing (English only)
 
 Package name (propozycja): `uk.novopix.aquaforce`
-Prywatność: https://novopix.uk/aqua-force/privacy.html
-Gra online: https://novopix.uk/aqua-force/
+Prywatność: https://novopix.uk/novojet/privacy.html
+Gra online: https://novopix.uk/novojet/
 Kontakt: contact@novopix.uk
 
 ## EN
