@@ -51,7 +51,7 @@ canvas{width:100%;height:100%;display:block;image-rendering:pixelated;touch-acti
 </div>
 <script>
 const cv=document.getElementById('c'),g=cv.getContext('2d');g.imageSmoothingEnabled=false;
-const W=240,RH=8,HUDH=60,SECLEN=180,$=id=>document.getElementById(id);
+const W=240,RH=8,HUDH=38,SECLEN=180,$=id=>document.getElementById(id);
 let H=240,CH=296,N=H/RH+2,SHIP=200,BW=240,BH=296;
 const C={k:'#000',w:'#fff',r:'#e0402a',c:'#4aa0ff',p:'#a03ab0',g:'#58b858',b:'#1a1a60',y:'#ffd23f',o:'#ff9a3c',n:'#2f7d3a',lr:'#e0402a',dg:'#3a3d46',mg:'#7d808a',lg:'#58b858',lb:'#a5a0e0',gr:'#b8bac4'};
 
@@ -88,20 +88,16 @@ function pine(x,y,c){g.fillStyle=c;g.fillRect(x+2,y,2,2);g.fillRect(x+1,y+2,4,2)
 function band(y,h,stops){const gr=g.createLinearGradient(0,y,0,y+h);stops.forEach((c,i)=>{gr.addColorStop(i/stops.length,c);gr.addColorStop((i+1)/stops.length-.001,c)});return gr}
 const LOGO=['#ffd23f','#ff9a3c','#e0402a','#a03ab0'];
 function hud(){
- const y=0,F8='8px "Press Start 2P",monospace';
- g.fillStyle=C.mg;g.fillRect(0,0,W,HUDH);g.fillStyle=C.dg;g.fillRect(0,HUDH-3,W,3);
- g.font=F8;g.textAlign='left';g.fillStyle=C.y;g.fillText('P1',10,y+18);
- g.textAlign='right';g.font='10px "Press Start 2P",monospace';g.fillText(score,128,y+18);
- g.font=F8;g.fillStyle=C.w;g.fillText('HI '+Math.max(hi,score),W-8,y+18);
- g.fillStyle=C.dg;g.fillRect(10,y+24,112,18);g.fillStyle=C.gr;g.fillRect(12,y+26,108,14);
- g.fillStyle=C.dg;g.textAlign='left';g.fillText('E',16,y+37);g.textAlign='center';g.fillText('1/2',66,y+37);g.textAlign='right';g.fillText('F',116,y+37);
- g.fillStyle=(fuel<25&&tick%16<8)?C.r:C.y;g.fillRect((14+Math.max(0,fuel)/100*100)|0,y+24,4,18);
- g.textAlign='left';g.fillStyle=C.y;g.fillText('LEVEL',134,y+36);g.textAlign='right';g.fillStyle=C.w;g.fillText(lvl,W-8,y+36);
- for(let i=0;i<lives;i++)g.drawImage(S.p,134+i*12,y+37,9,9);
- const sl=Math.round((spd-.5)/2.5*5)+1;
- g.textAlign='left';g.fillStyle=C.y;g.fillText('V',10,y+54);
- for(let i=0;i<6;i++){g.fillStyle=i<sl?(i>3?C.lr:C.lg):C.dg;g.fillRect(24+i*14,y+46,10,8)}
- g.textAlign='right';g.fillStyle=band(y+46,10,LOGO);g.fillText('AQUA FORCE',W-8,y+54)}
+ const F8='8px "Press Start 2P",monospace';
+ g.fillStyle='#0c0c2e';g.fillRect(0,0,W,HUDH);g.fillStyle='#2a2a6a';g.fillRect(0,HUDH-2,W,2);
+ g.font='10px "Press Start 2P",monospace';g.textAlign='left';g.fillStyle=C.y;g.fillText(score,8,15);
+ g.font=F8;
+ g.textAlign='center';g.fillStyle=C.lb;g.fillText('HI '+Math.max(hi,score),132,15);
+ for(let i=0;i<lives;i++)g.drawImage(S.p,W-8-(i+1)*13,5,10,10);
+ g.fillStyle='#2a2a6a';g.fillRect(8,22,104,10);g.fillStyle='#14143c';g.fillRect(9,23,102,8);
+ const f=Math.max(0,Math.min(100,fuel));g.fillStyle=(fuel<25&&tick%16<8)?C.r:(fuel<25?C.o:C.g);g.fillRect(9,23,(f*1.02)|0,8);
+ g.textAlign='left';g.fillStyle=C.w;g.fillText('FUEL',118,31);
+ g.textAlign='right';g.fillStyle=C.y;g.fillText('LVL '+lvl,W-8,31)}
 const R=(a,b)=>a+Math.random()*(b-a);
 function getAC(){return AC||(AC=new (window.AudioContext||window.webkitAudioContext)())}
 function tone(f,d,t,f2,v){if(muted)return;try{const a=getAC(),o=a.createOscillator(),q=a.createGain(),n=a.currentTime;o.type=t||'square';o.frequency.setValueAtTime(f,n);o.frequency.exponentialRampToValueAtTime(f2||f,n+d);q.gain.setValueAtTime(v||.04,n);q.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(q);q.connect(a.destination);o.start();o.stop(n+d)}catch(e){}}
@@ -249,7 +245,7 @@ function draw(){
   if(msgT>0){g.fillStyle='rgba(20,10,60,.75)';g.fillRect(0,HUDH+14,W,22);g.fillStyle=C.w;g.fillText(msg,W/2,HUDH+29)}
  }
  if(paused&&state==='play'){g.fillStyle='rgba(20,10,60,.75)';const my=Math.round(CH/2)-25;g.fillRect(0,my,W,50);g.fillStyle=C.w;g.font='14px "Press Start 2P",monospace';g.fillText('PAUSE',W/2,my+32)}
- if(state==='title'||state==='over'){g.save();g.translate(0,HUDH-8+Math.max(0,Math.round((CH-296)/2)));titleBox();g.restore()}
+ if(state==='title'||state==='over'){g.save();g.translate(0,52+Math.max(0,Math.round((CH-296)/2)));titleBox();g.restore()}
 }
 let acc=0,last=0;
 function loop(t){
