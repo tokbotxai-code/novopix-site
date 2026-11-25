@@ -1,4 +1,4 @@
-# Aqua Force: Google Play listing (EN / PL)
+# Aqua Force: Google Play listing (English only)
 
 Package name (propozycja): `uk.novopix.aquaforce`
 Prywatność: https://novopix.uk/aqua-force/privacy.html
@@ -26,28 +26,6 @@ Features
 - Top 5 scores saved on your device
 - Works offline, no ads, no accounts, no in-app purchases, no tracking
 - Plays in portrait and landscape
-
-## PL
-**Tytuł (max 30):** Aqua Force
-**Krótki opis (max 80):** Retro gra zręcznościowa: leć nad rzeką, tankuj i niszcz mosty.
-**Pełny opis:**
-Leć nisko nad rzeką w szybkiej strzelance w stylu retro. Omijaj wyspy i brzegi, strzelaj do okrętów, śmigłowców, odrzutowców, balonów i czołgów i pilnuj wskaźnika paliwa.
-
-Jak grać
-- Przesuwaj joystick w lewo i w prawo, żeby skręcać.
-- Wychyl go w górę, żeby lecieć szybciej, w dół, żeby zwolnić. Puść, a samolot wróci do normalnej prędkości.
-- Przytrzymaj OGIEŃ, żeby strzelać. Strzela też dotknięcie ekranu gry.
-- Przelot przez zbiornik paliwa tankuje, a zestrzelenie daje punkty.
-- Zniszcz most na końcu sekcji, żeby przejść do następnej. Rzeka się zwęża, a wrogowie są coraz groźniejsi.
-- Dodatkowe życie co 3000 punktów.
-
-Cechy
-- Klasyczny klimat arcade, paleta retro 8-bit i opcjonalny filtr linii CRT
-- Analogowy joystick: skręt, przyspieszanie i zwalnianie jednym kciukiem
-- Nieskończone sekcje ze zmieniającymi się kolorami rzeki i rosnącą trudnością
-- Pięć najlepszych wyników zapisanych na urządzeniu
-- Działa offline, bez reklam, kont, zakupów w aplikacji i śledzenia
-- Pion i poziom
 
 ## Kategoria i oznaczenia (do formularzy w Play Console)
 - Typ: Gra. Kategoria: Arcade. Tagi: arcade, retro, strzelanka.

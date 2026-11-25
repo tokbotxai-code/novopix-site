@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="author" content="NovoPix Studio">
 <title>Aqua Force</title>
-<meta name="description" content="Aqua Force: zręcznościowa gra retro. Lecisz nad rzeką, zbierasz paliwo, strzelasz do wrogów i niszczysz mosty. Retro arcade river jet game.">
+<meta name="description" content="Aqua Force: retro arcade river jet game. Fly the river, collect fuel, shoot enemies and destroy bridges.">
 <meta name="theme-color" content="#352879">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,9 +15,8 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preload" href="fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face{font-family:"Press Start 2P";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/press-start-2p-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
 @font-face{font-family:"Press Start 2P";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/press-start-2p-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-:root{--bg:#352879;--fg:#a5a0e0;--panel:#2a1f66;--btn:#6c5eb5;--acc:#ffd23f;--ctl:clamp(100px,20dvh,150px);--w:min(calc(100vw - 16px),calc((100dvh - var(--ctl) - 34px - 44px) * .811),620px);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+:root{--bg:#352879;--fg:#a5a0e0;--panel:#2a1f66;--btn:#6c5eb5;--acc:#ffd23f;--ctl:clamp(72px,13dvh,100px);--w:min(calc(100vw - 16px),calc((100dvh - var(--ctl) - 28px - 40px) * .811),640px);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 html,body{height:100%;height:100dvh;margin:0;touch-action:manipulation}
 body{background:var(--bg);color:var(--fg);font-family:"Press Start 2P",ui-monospace,Menlo,monospace;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;overflow:hidden}
@@ -26,16 +25,16 @@ canvas{width:100%;height:100%;display:block;image-rendering:pixelated;touch-acti
 .scr.crt::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(0,0,0,.34) 0,rgba(0,0,0,.34) 1px,transparent 1px,transparent 3px);box-shadow:inset 0 0 36px rgba(0,0,0,.6)}
 #pad{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;width:var(--w);touch-action:none}
 #pad *{touch-action:none}
-#steer{grid-column:1/5;height:var(--ctl);background:var(--panel);border:3px solid var(--btn);border-radius:calc(var(--ctl)*.36);position:relative}
+#steer{grid-column:1/5;max-width:100%;height:var(--ctl);background:var(--panel);border:3px solid var(--btn);border-radius:calc(var(--ctl)*.36);position:relative}
 .jb{position:absolute;inset:8px;border-radius:calc(var(--ctl)*.3);background:radial-gradient(circle at 50% 40%,#3a2d8a,#241a5a);box-shadow:inset 0 4px 12px #0008}
 .jb::before{content:"";position:absolute;left:14%;right:14%;top:50%;height:2px;background:rgba(165,160,224,.25)}
 .jb::after{content:"";position:absolute;top:12%;bottom:12%;left:50%;width:2px;background:rgba(165,160,224,.25)}
 #jk{position:absolute;left:50%;top:50%;width:calc(var(--ctl)*.44);height:calc(var(--ctl)*.44);margin:calc(var(--ctl)*-.22) 0 0 calc(var(--ctl)*-.22);border-radius:50%;background:radial-gradient(circle at 40% 35%,#8f82d6,#5a4cae);border:3px solid var(--fg);box-shadow:0 4px 10px #0009;will-change:transform}
 #steer.on #jk{background:radial-gradient(circle at 40% 35%,#ffe27a,#ffd23f)}
-#fire{grid-column:5/7;height:var(--ctl);font-size:11px;background:#e0402a;color:#fff}
+#fire{grid-column:5/7;width:calc(var(--ctl)*.82);height:calc(var(--ctl)*.82);justify-self:center;align-self:center;border-radius:50%;font-size:9px;background:#e0402a;color:#fff}
 #fire.on{background:var(--acc);color:#000}
-#start{grid-column:span 2;height:34px;font-size:10px}
-.tg{grid-column:span 2;font-size:7px}
+#start{grid-column:span 2;height:26px;font-size:8px}
+.tg{grid-column:span 2;height:26px;font-size:6px}
 @media (orientation:landscape) and (max-height:520px){:root{--w:calc((100dvh - 24px) * .811);--ctl:clamp(66px,26dvh,100px)}body{flex-direction:row;gap:14px}#pad{width:min(calc(100vw - var(--w) - 48px),380px);align-content:center}}
 </style>
 </head>
@@ -43,9 +42,9 @@ canvas{width:100%;height:100%;display:block;image-rendering:pixelated;touch-acti
 <div class="scr" id="scr"><canvas id="c" width="240" height="296"></canvas></div>
 <div id="pad">
 <div id="steer"><div class="jb"><div id="jk"></div></div></div>
-<button id="fire">OGIEŃ</button>
+<button id="fire">FIRE</button>
 <button id="start">START</button>
-<button id="crtb" class="tg">CRT: NIE</button><button id="snd" class="tg">DŹWIĘK: TAK</button>
+<button id="crtb" class="tg">CRT: OFF</button><button id="snd" class="tg">SOUND: ON</button>
 </div>
 <script>
 const cv=document.getElementById('c'),g=cv.getContext('2d');g.imageSmoothingEnabled=false;
@@ -80,11 +79,11 @@ function hud(){
  g.fillStyle=C.mg;g.fillRect(0,y,W,CH-H);g.fillStyle=C.dg;g.fillRect(0,y,W,3);
  g.font=F8;g.textAlign='left';g.fillStyle=C.y;g.fillText('P1',10,y+18);
  g.textAlign='right';g.font='10px "Press Start 2P",monospace';g.fillText(score,128,y+18);
- g.font=F8;g.fillStyle=C.w;g.fillText('REK '+Math.max(hi,score),W-8,y+18);
+ g.font=F8;g.fillStyle=C.w;g.fillText('HI '+Math.max(hi,score),W-8,y+18);
  g.fillStyle=C.dg;g.fillRect(10,y+24,112,18);g.fillStyle=C.gr;g.fillRect(12,y+26,108,14);
  g.fillStyle=C.dg;g.textAlign='left';g.fillText('E',16,y+37);g.textAlign='center';g.fillText('1/2',66,y+37);g.textAlign='right';g.fillText('F',116,y+37);
  g.fillStyle=(fuel<25&&tick%16<8)?C.r:C.y;g.fillRect((14+Math.max(0,fuel)/100*100)|0,y+24,4,18);
- g.textAlign='left';g.fillStyle=C.y;g.fillText('POZIOM',134,y+36);g.textAlign='right';g.fillStyle=C.w;g.fillText(lvl,W-8,y+36);
+ g.textAlign='left';g.fillStyle=C.y;g.fillText('LEVEL',134,y+36);g.textAlign='right';g.fillStyle=C.w;g.fillText(lvl,W-8,y+36);
  for(let i=0;i<lives;i++)g.drawImage(S.p,134+i*14,y+40,10,10);
  const sl=Math.round((spd-.5)/2.5*5)+1;
  g.textAlign='left';g.fillStyle=C.y;g.fillText('V',10,y+54);
@@ -139,7 +138,7 @@ function boom(x,y,n,c){for(let i=0;i<n;i++)parts.push({x,y,vx:R(-2,2),vy:R(-2,2)
 function die(){
  noise(.9,2400,120,.28);tone(120,.7,'sawtooth',30,.08);boom(p.x+7,p.y+7,28);lives--;pause=60;
  if(lives<0){state='over';$('start').textContent='START';saveScore()}
- else{const pp=parts;reset(false);parts=pp;pause=60;msg='SEKCJA '+lvl;msgT=120}
+ else{const pp=parts;reset(false);parts=pp;pause=60;msg='SECTION '+lvl;msgT=120}
 }
 function rowAt(y){return rows[Math.floor((y-off)/RH)+1]}
 const PTS={s:30,h:60,j:100,b:60,t:250,f:80};
@@ -170,7 +169,7 @@ function update(){
  if(bul){
   bul.y-=7;
   const r=rowAt(bul.y);let hit=bul.y<-4;
-  if(r&&r.b===1){rows.forEach(q=>{if(q.b===1)q.b=2});score+=500;lvl++;hit=true;msg='MOST ZNISZCZONY +500';msgT=100;noise(1.1,2000,90,.32);tone(90,.9,'sawtooth',25,.08);boom(bul.x,bul.y,40,'#8a8f96')}
+  if(r&&r.b===1){rows.forEach(q=>{if(q.b===1)q.b=2});score+=500;lvl++;hit=true;msg='BRIDGE DESTROYED +500';msgT=100;noise(1.1,2000,90,.32);tone(90,.9,'sawtooth',25,.08);boom(bul.x,bul.y,40,'#8a8f96')}
   for(const e of ents)if(bul&&!e.dead&&bul.x>e.x&&bul.x<e.x+e.w&&bul.y>e.y&&bul.y<e.y+e.h){score+=PTS[e.t];e.dead=1;hit=true;noise(.35,3000,300,.2);tone(220,.18,'square',60,.04);boom(e.x+e.w/2,e.y+e.h/2,14)}
   ents=ents.filter(e=>!e.dead);if(hit)bul=null;
  }
@@ -208,11 +207,11 @@ function titleBox(){
  g.fillStyle='#000';g.fillText('AQUA',W/2+3,65);g.fillText('FORCE',W/2+3,97);
  g.fillStyle=band(38,66,LOGO);g.fillText('AQUA',W/2,62);g.fillText('FORCE',W/2,94);
  g.font='8px "Press Start 2P",monospace';g.fillStyle='#a5a0e0';
- g.fillText(state==='over'?'KONIEC GRY  '+score:'Zniszcz mosty. Pilnuj paliwa.',W/2,116);
- g.fillStyle=C.y;g.fillText('NAJLEPSZE WYNIKI',W/2,134);
- if(!tops.length){g.fillStyle='#a5a0e0';g.fillText('BRAK WYNIKÓW',W/2,152)}
+ g.fillText(state==='over'?'GAME OVER  '+score:'Destroy bridges. Refuel.',W/2,116);
+ g.fillStyle=C.y;g.fillText('BEST SCORES',W/2,134);
+ if(!tops.length){g.fillStyle='#a5a0e0';g.fillText('NO SCORES YET',W/2,152)}
  tops.forEach((e,i)=>{g.fillStyle=(state==='over'&&i===newIdx&&tick%30<20)?C.w:(i===0?C.y:'#a5a0e0');g.fillText((i+1)+'. '+String(e.s).padStart(6,'0')+'  S'+e.l,W/2,152+i*13)});
- if(tick%50<32){g.fillStyle=C.w;g.fillText('NACIŚNIJ START',W/2,218)}
+ if(tick%50<32){g.fillStyle=C.w;g.fillText('PRESS START',W/2,218)}
  g.fillStyle=C.lb;g.fillText('(C) NOVOPIX STUDIO',W/2,230);
 }
 function draw(){
@@ -232,10 +231,10 @@ function draw(){
  hud();g.textAlign='center';
  if(state==='play'){
   g.font='8px "Press Start 2P",monospace';
-  if(!paused&&fuel<25&&tick%32<20){g.fillStyle=C.lr;g.fillText('PALIWO!',W/2,16)}
+  if(!paused&&fuel<25&&tick%32<20){g.fillStyle=C.lr;g.fillText('FUEL!',W/2,16)}
   if(msgT>0){g.fillStyle='rgba(20,10,60,.75)';g.fillRect(0,60,W,22);g.fillStyle=C.w;g.fillText(msg,W/2,75)}
  }
- if(paused&&state==='play'){g.fillStyle='rgba(20,10,60,.75)';g.fillRect(0,100,W,50);g.fillStyle=C.w;g.font='14px "Press Start 2P",monospace';g.fillText('PAUZA',W/2,132)}
+ if(paused&&state==='play'){g.fillStyle='rgba(20,10,60,.75)';g.fillRect(0,100,W,50);g.fillStyle=C.w;g.font='14px "Press Start 2P",monospace';g.fillText('PAUSE',W/2,132)}
  if(state==='title'||state==='over')titleBox();
 }
 let acc=0,last=0;
@@ -248,10 +247,10 @@ function step(){
  if(state==='play'){if(!paused)update();engine(!paused&&pause<=0)}
  else{engine(false);off+=1.2;while(off>=RH){off-=RH;rows.unshift(mkRow(false));rows.pop()}parts.forEach(q=>{q.x+=q.vx;q.y+=q.vy;q.l--});parts=parts.filter(q=>q.l>0);if(state==='over'&&pause>0)pause--}
 }
-function start(){if(state==='play')return;if(state==='over'&&pause>0)return;reset(true);state='play';paused=false;msg='SEKCJA 1';msgT=100;$('start').textContent='PAUZA';try{AC&&AC.resume()}catch(e){}tone(440,.1,'square',880,.04)}
-function setMute(v){muted=v;lsSet('aquaforce-mute',v?'1':'0');$('snd').textContent='DŹWIĘK: '+(v?'NIE':'TAK');try{AC&&AC.resume()}catch(e){}}
-function setCRT(v){crt=v;lsSet('aquaforce-crt',v?'1':'0');$('scr').classList.toggle('crt',v);$('crtb').textContent='CRT: '+(v?'TAK':'NIE')}
-function togglePause(){paused=!paused;$('start').textContent=paused?'DALEJ':'PAUZA'}
+function start(){if(state==='play')return;if(state==='over'&&pause>0)return;reset(true);state='play';paused=false;msg='SECTION 1';msgT=100;$('start').textContent='PAUSE';try{AC&&AC.resume()}catch(e){}tone(440,.1,'square',880,.04)}
+function setMute(v){muted=v;lsSet('aquaforce-mute',v?'1':'0');$('snd').textContent='SOUND: '+(v?'OFF':'ON');try{AC&&AC.resume()}catch(e){}}
+function setCRT(v){crt=v;lsSet('aquaforce-crt',v?'1':'0');$('scr').classList.toggle('crt',v);$('crtb').textContent='CRT: '+(v?'ON':'OFF')}
+function togglePause(){paused=!paused;$('start').textContent=paused?'RESUME':'PAUSE'}
 addEventListener('keydown',e=>{
  const k=e.key.length===1?e.key.toLowerCase():e.key;
  if(state!=='play'&&(e.key===' '||e.key==='Enter')){start();e.preventDefault();return}
@@ -280,7 +279,7 @@ $('snd').addEventListener('pointerdown',e=>{e.preventDefault();setMute(!muted)})
 const fb=$('fire');
 fb.addEventListener('pointerdown',e=>{e.preventDefault();fb.setPointerCapture(e.pointerId);keys.fire=true;fireTap=8;fb.classList.add('on');if(state!=='play')start()});
 ['pointerup','pointercancel'].forEach(n=>fb.addEventListener(n,()=>{keys.fire=false;fb.classList.remove('on')}));
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='play'&&!paused){paused=true;$('start').textContent='DALEJ'}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='play'&&!paused){paused=true;$('start').textContent='RESUME'}});
 addEventListener('blur',()=>{keys={};steer=0});
 addEventListener('contextmenu',e=>e.preventDefault());
 try{document.fonts.load('8px "Press Start 2P"')}catch(e){}
