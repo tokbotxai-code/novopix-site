@@ -1,4 +1,4 @@
-# Aqua Force: wydanie w Google Play (instrukcja)
+# NovoJet: wydanie w Google Play (instrukcja)
 
 Stan: gra jest PWA (manifest, ikony, service worker, działa offline, zero zewnętrznych zapytań), ma politykę prywatności i komplet materiałów do sklepu w `store/`. Brakuje tylko rzeczy wymagających konta właściciela (punkty 1–2 niżej).
 
@@ -12,7 +12,7 @@ Stan: gra jest PWA (manifest, ikony, service worker, działa offline, zero zewn�
 3. Pobierz plik `.aab` i dołóż do Play Console. UWAGA: TWA wymaga pliku `https://novopix.uk/.well-known/assetlinks.json` z odciskiem SHA-256 klucza podpisu. Plik ten dodaję ja po podaniu odcisku (z Play Console: Konfiguracja → Integralność aplikacji → klucz podpisu aplikacji).
 
 **B. Capacitor (gra spakowana w aplikację, bez weryfikacji domeny, działa w pełni offline):**
-1. Na komputerze z Android Studio: `npm init -y && npm i @capacitor/core @capacitor/cli @capacitor/android`, `npx cap init "Aqua Force" uk.novopix.aquaforce --web-dir www`, skopiuj zawartość tego folderu (bez `store/`) do `www/`, `npx cap add android`, `npx cap sync`.
+1. Na komputerze z Android Studio: `npm init -y && npm i @capacitor/core @capacitor/cli @capacitor/android`, `npx cap init "NovoJet" uk.novopix.aquaforce --web-dir www`, skopiuj zawartość tego folderu (bez `store/`) do `www/`, `npx cap add android`, `npx cap sync`.
 2. W Android Studio: Build → Generate Signed Bundle (AAB), targetSdk zgodny z aktualnym wymogiem Play.
 3. Ikonę aplikacji ustaw z `icon-512.png` (adaptacyjna: `icon-maskable-512.png`).
 
