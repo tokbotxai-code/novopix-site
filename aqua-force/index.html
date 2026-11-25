@@ -25,7 +25,6 @@ canvas{width:100%;height:100%;display:block;image-rendering:pixelated;touch-acti
 #fire.on{background:var(--acc);color:#000}
 #start{grid-column:span 2;height:34px;font-size:10px}
 .tg{grid-column:span 2;font-size:7px}
-small{font-size:7px;opacity:.75;text-align:center;line-height:1.7;width:min(100%,360px)}
 </style>
 </head>
 <body>
@@ -36,7 +35,6 @@ small{font-size:7px;opacity:.75;text-align:center;line-height:1.7;width:min(100%
 <button id="start">START</button>
 <button id="crtb" class="tg">CRT: NIE</button><button id="snd" class="tg">DŹWIĘK: TAK</button>
 </div>
-<small>Joystick: przesuń gałkę w lewo lub w prawo (im dalej, tym szybciej skręcasz). OGIEŃ: przytrzymaj = ciągły ogień (strzela też dotknięcie ekranu gry). Klawiatura: ← → sterowanie, spacja = ogień, P/Esc = pauza, M = dźwięk, C = filtr CRT. Zbiornik paliwa = tankowanie, ale możesz go też zestrzelić za punkty. Zniszcz most, by przejść do następnej sekcji; po stracie życia wracasz na jej początek z chwilą ochrony. Co 3000 pkt dodatkowe życie.</small>
 <script>
 const cv=document.getElementById('c'),g=cv.getContext('2d');g.imageSmoothingEnabled=false;
 const W=240,H=240,CH=296,RH=8,N=H/RH+2,SECLEN=180,$=id=>document.getElementById(id);
