@@ -122,9 +122,9 @@ function mkRow(spawn){
   const dens=Math.min(.35+lvl*.07+rowc/4000,.9);
   if(!row.b&&!row.i&&rowc%3===0&&Math.random()<dens){
    const q=Math.random(),x=R(row.l+14,row.r-14),dr=Math.random()<.5?-1:1;
-   if(q<.16)ents.push({t:'f',x,y:-24,w:10,h:24});
-   else if(q<.50||lvl<2&&q>=.74)ents.push({t:'s',x,y:-8,w:16,h:8,dx:R(.3,.6+lvl*.05)*dr});
-   else if(q<.74)ents.push({t:'h',x,y:-10,w:14,h:8,dx:R(.4,.8+lvl*.05)*dr,cd:R(60,160)});
+   if(q<.28)ents.push({t:'f',x,y:-24,w:10,h:24});
+   else if(q<.58||lvl<2&&q>=.82)ents.push({t:'s',x,y:-8,w:16,h:8,dx:R(.3,.6+lvl*.05)*dr});
+   else if(q<.82)ents.push({t:'h',x,y:-10,w:14,h:8,dx:R(.4,.8+lvl*.05)*dr,cd:R(60,160)});
    else if(q<.88)ents.push({t:'j',x:dr>0?-16:W+16,y:-8,w:16,h:6,dx:dr*(1.6+lvl*.12)});
    else ents.push({t:'b',x,y:-12,w:8,h:12,dx:R(.15,.4)*dr});
   }
